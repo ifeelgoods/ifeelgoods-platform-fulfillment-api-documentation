@@ -1,0 +1,1118 @@
+FORMAT: 1A
+HOST: https://api-sandbox.ifeelgoods.com
+
+# Ifeelgoods Platform Fulfillment API
+This Fulfillment API is a __*Rewards Delivery*__ service that allows you to provide digital rewards to your end users.
+This is a RESTful API with a focus on practicality and ease of use.
+The current API version is __version 2__ and is targeted for __Server-to-Server__ interactions.
+
+## Before you start
+This is the technical documentation for the Fulfillment API which is one component of the Ifeelgoods Platform.
+Please read through our [API Overview](https://ifeelgoods.atlassian.net/wiki/display/API/Fulfillment+API+User+Guide) before proceeding further.
+
+## Environments
+Two environments are supported :
+
+- __*Sandbox*__
+- __*Production*__
+
+We provide a [__*Status Page*__](http://status.ifeelgoods.com) where you can stay up to date on our operational status. 
+We will communicate about maintenance windows, incidents and API updates through that page so we encourage you to subscribe to one of the notification channels provided (Email, RSS, etc)
+
+### Sandbox
+This environment provides a playground for devs to test their integration with the Fulfillment API and even run automated integration tests against it.
+The environment runs the same code base as the production environment and is maintained in lock step with it, except that the data is not real and all activity may be erased from time to time.
+__There are no financial side effects to any actions on this environment__ (i.e only placeholder/fake rewards are delivered through this API) and at this time, no quotas are enforced.
+
+API credentials provided for this environment do NOT work in other environments.
+
+- __*API Endpoint*__ : https://api-sandbox.ifeelgoods.com/
+- __*Oauth Endpoint*__ : https://oauth-sandbox.ifeelgoods.com/
+
+### Production
+This environment is the real __*Ifeelgoods Platform*__ and allows you to grab rewards on-demand from a wide range of providers as listed on our [catalog](http://www.ifeelgoods.com/catalog).
+Actions performed in this environment may have financial repercussions and in that case, will be invoiced according to the contract you have with Ifeelgoods.
+
+- __*API Endpoint*__ : https://api.ifeelgoods.com/
+- __*Oauth Endpoint*__ : https://oauth.ifeelgoods.com/
+
+## Authentication
+Credentials consist of :
+
+- __API Key__ : API Client identifier, can be shared.
+- __API Secret__ : Shared secret between client and API provider (Ifeelgoods).
+
+These credentials are specific to each environment (as described above) and allow you access your resources exclusively.
+To get your credentials, please reach out to your [Ifeelgoods contact](mailto:apisupport@ifeelgoods.com).
+
+Two authentication methods are possible :
+
+- __Token-based authentication__ (i.e embedding an Auth Token in the headers on every request) 
+- __Header-based authentication__ (i.e embedding __*api_key*__ and __*api_secret*__ in headers on every request)
+
+Please [contact us](mailto:apisupport@ifeelgoods.com) for more information.
+
+### Oauth2 tokens
+There's no reinventing the wheel here so we were inspired by the [Google Oauth 2](https://developers.google.com/accounts/docs/OAuth2) documentation to use the service accounts approach, albeit in a simplified form.
+Tokens need to be included in all requests made to the API using the __*AUTHORIZATION*__ header
+
+```
+AUTHORIZATION : Bearer TOKEN
+```
+
+In order to obtain a token, please refer to __*/oauth/token*__ documentation below.
+
+### API Key-based Authentication
+A simpler approach is to include the API credentials in the headers directly, using __*Api-Key*__ and __*Api-Secret*__.
+
+```
+Api-Key : API_KEY
+Api-Secret : API_SECRET
+```
+
+### Oauth2 tokens vs API Keys authentication
+API-Key authentication is meant solely for Server-to-Server interactions with this API since it requires sending the API secret on every request. 
+The Token-based authentication can be used for hitting the API from frontend or mobile applications.
+
+## Quickstart
+We'll walk through the steps to authenticate against the API and perform a redemption to grab a reward code, using the ubiquitous `curl`.
+
+### Prerequisites
+Make sure you have in hand your API client id and API client secret for the sandbox environment.
+For this example :
++ API Key : bfc0ca8e10eed90f74fece44346c18004ea75794181979efd5bb91abe9db8e0e
++ API Secret : #####
+
+### Request Token
+Using the credentials, we'll request a `Token` from the oauth endpoint:
+
+```
+curl 'https://oauth-sandbox.ifeelgoods.com/oauth/token' \
+    -H 'Content-Type: application/json' \
+    -d '{"client_id":"bfc0ca8e10eed90f74fece44346c18004ea75794181979efd5bb91abe9db8e0e", "client_secret":"#####", "grant_type":"account_application"}'
+```
+and the `response` is :
+
+```
+{
+    "access_token": "a59e7fd825c2a1e18ddc63055f7d04ceb9c555863367c00f6160cc1328f8e800",
+    "token_type": "bearer",
+    "expires_in": 900
+}
+```
+
+### Hmm, let's check who we are?
+we'll use the `Token`from the previous step and put it in the headers as we hit the `/accounts/me` route
+
+```
+curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/accounts/me' \
+    -H 'AUTHORIZATION:Bearer a59e7fd825c2a1e18ddc63055f7d04ceb9c555863367c00f6160cc1328f8e800'
+```
+
+and we get a `response` similar to this one :
+
+```
+{
+    "data": {
+        "id": 100002,
+        "login": null,
+        "name": "API Documentation",
+        "email": "apisupport@ifeelgoods.com",
+        "phone_number": "",
+        "role": "user",
+        "timezone": "America/Los_Angeles"
+    }
+}
+```
+
+And that's your first successful API call!
+
+### Let's reward ourselves for this success !
+we'll use the same `Token` again to get ourselves a well reserved reward using the `/redemptions/{id}/redeem` route.
+we're going to use a handy trick that we make available for testing. There's a redemption `IFEEL-GOODS` that's
+always available and that can be used for test driving the API.
+
+```
+curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/actions/redeem' \
+    -H 'Content-Type: application/json' \
+    -H 'AUTHORIZATION:Bearer a59e7fd825c2a1e18ddc63055f7d04ceb9c555863367c00f6160cc1328f8e800' \
+    -d '{ "data": { "provider": "email", "uid": "apisupport@ifeelgoods.com" } }'
+    
+```
+
+which leads to this `response` :
+
+```
+{
+    "data": {
+        "id": "IFEEL-GOODS",
+        "url": "http://redemption-testing.ifeelgoods.com/#/IFEEL-GOODS",
+        "state": "redeemed",
+        "order_id": "4768c272-8082-42ba-9b59-8a8ea5926a98",
+        "testing": false,
+        "activation_datetime": "2014-12-22T09:41:02.000-08:00",
+        "redeemed_datetime": "2014-12-23T10:04:16.000-08:00",
+        "updated_datetime": "2014-12-23T10:04:16.000-08:00",
+        "promotion": {
+            "id": 1,
+            "status": "enabled",
+            "state": "ready"
+        },
+        "reward": {
+            "sku": "PAY-PAY-10USD-US",
+            "status": "enabled",
+            "state": "ready"
+        },
+        "user": {
+            "id": 1
+        },
+        "authentication_systems": [
+            "facebook_connect",
+            "email"
+        ],
+        "notification_channels": [],
+        "reward_codes": {
+            "type": "unique_code",
+            "codes": [
+                {
+                    "name": "Reward Code",
+                    "value": "ABCDE-12345-WXYZ",
+                    "format": "string",
+                    "usage": "primary"
+                }
+            ]
+        }
+    }
+}
+```
+
+Happy customer :-)
+
+### What about using API Key-based authentication?
+Let's include the API Key and Secret directly in the request.
+
+```
+curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/user' \
+    -H 'Content-Type: application/json' \
+    -H 'Api-Key: bfc0ca8e10eed90f74fece44346c18004ea75794181979efd5bb91abe9db8e0e' \
+    -H 'Api-Secret: ###' \
+    -d '{ "data": { "provider": "email", "uid": "apisupport@ifeelgoods.com" } }'
+```
+
+which leads to the same `response` :
+
+```
+{
+    "data": {
+        "id": "IFEEL-GOODS",
+        "url": "http://redemption-testing.ifeelgoods.com/#/IFEEL-GOODS",
+        "state": "redeemed",
+        "order_id": "4768c272-8082-42ba-9b59-8a8ea5926a98",
+        "testing": false,
+        "activation_datetime": "2014-12-22T09:41:02.000-08:00",
+        "redeemed_datetime": "2014-12-23T10:04:16.000-08:00",
+        "updated_datetime": "2014-12-23T10:04:16.000-08:00",
+        "promotion": {
+            "id": 1,
+            "status": "enabled",
+            "state": "ready"
+        },
+        "reward": {
+            "sku": "PAY-PAY-10USD-US",
+            "status": "enabled",
+            "state": "ready"
+        },
+        "user": {
+            "id": 1
+        },
+        "authentication_systems": [
+            "facebook_connect",
+            "email"
+        ],
+        "notification_channels": [],
+        "reward_codes": {
+            "type": "unique_code",
+            "codes": [
+                {
+                    "name": "Reward Code",
+                    "value": "ABCDE-12345-WXYZ",
+                    "format": "string",
+                    "usage": "primary"
+                }
+            ]
+        }
+    }
+}
+```
+
+# API Routes
+
+# Group Oauth Tokens
+Token lifecycle operations from `Oauth endpoint`
+
+## Create Oauth Token [/oauth/token{Body:api_key,api_secret,grant_type}]
+Grab a new oauth token using your api credentials
+
++ Parameters
+
+    + api_key (required, string, `ABC123`) ... API Key identifier for Oauth handshake
+    + api_secret (required, string, `####`) ... API Secret for Oauth handshake
+    + grant\_type (required, string) ... Type of token requested
+    
+        + Values
+            + `account_application`
+
+### Retrieve Token [POST]
++ Request
+
+    + Body
+    
+            {
+                "client\_id" : api_key,
+                "client\_secret" : api_secret,
+                "grant\_type" : "account\_application"
+            }
+
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "access_token": "a7eb47e73ac6eba563dbce108204203c23718d9f83f027975067cc9d5ee16912",
+                "token_type": "bearer",
+                "expires_in": 7200,
+                "refresh_token": null,
+                "scope": ""
+            }
+            
++ Response 401
+Unrecognized or Invalid credentials
+
+    + Body
+            
+            {
+                "error":"invalid_client",
+                "error_description":"Client authentication failed due to unknown client, no client authentication included, or unsupported authentication method."
+            }
+
+## Oauth Token Information [/oauth/token/info{Body: token}]
+Grab the information(expiration time, account associated with the token, etc) for a given Token.
+
++ Parameters
+
+    + token (required, string, `XYZ123`) ... Token to get information about
+
+### Retrieve Token Info [GET]
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "resource\_owner\_id": 1,
+                "scopes": [],
+                "expires\_in\_seconds": 6090,
+                "application": {
+                "uid": "49a3c93ea993f07c4f78af8bcf237e667a6cf796b8bf98eab87ca89ea9e8996d"}
+            }
+
++ Response 401
+
+    + Body
+    
+            {
+                "error":"invalid_request",
+                "error_description":"The request is missing a required parameter, includes an unsupported parameter value, or is otherwise malformed."
+            }
+
+## Revoke Oauth Token [/oauth/revoke{Body : token}]
+Grab the information(expiration time, account associated with the token, etc) for a given Token.
+
++ Parameters
+
+    + token (required, string, `XYZ123`) ... Token to be revoked
+
+### Revoke Token [POST]
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "logout_url": "http://sandbox.ifeelgoods.com/logout"
+            }
+
++ Response 401
+
+    + Body
+    
+            {
+                "error":"invalid_request",
+                "error_description":"The request is missing a required parameter, includes an unsupported parameter value, or is otherwise malformed."
+            }
+
+# Group Accounts
+Accounts related resources of the **Fulfillment API** from `API endpoint`
+
+## Account [/fulfillment/v2/accounts/me]
+The details associated with your current account
+
+### Retrieve the current Account [GET]
++ Response 200 (application/json)
+
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            { 
+                "id": 170,
+                "login" : "jdoe",
+                "name": "John Doe",
+                "email" : "john.doe@gmail.com",
+                "phone_number":"+11234567890",
+                "role" : "user",
+                "timezone": "America/Los_Angeles"
+            }
+
+# Group Clients
+Clients related resources of the **Fulfillment API**
+
+## Clients Collection [/fulfillment/v2/clients]
+### List all Clients [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+    
+            {
+                "paging": {
+                    "page": 1,
+                    "per_page": 20,
+                    "total": 2
+                },
+                "data": [
+                    {
+                        "id": 226,
+                        "ui_id": "clientA",
+                        "name": "ClientA",
+                        "state": "active",
+                        "billing_location": "US",
+                        "contact_email": "support@clientA.com",
+                        "contact_phone": "",
+                        "locale": "en",
+                        "logo": {
+                            "en": {
+                                "raw": {
+                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/12fdcfc94b24495e22c67b85be09a483.png/raw.png",
+                                    "size": "250x78",
+                                    "content_type": "image/png"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": 237,
+                        "ui_id": "clientB",
+                        "name": "ClientB",
+                        "state": "active",
+                        "billing_location": "US",
+                        "contact_email": "joe@ifeelgoods.com",
+                        "contact_phone": "+11234567890",
+                        "locale": "en",
+                        "logo": {
+                            "en": {
+                                "raw": {
+                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/3ef949388e6a5388579649fb7bc0c70b.png/raw.png",
+                                    "size": "250x78",
+                                    "content_type": "image/png"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+
+## Client [/fulfillment/v2/clients/{id}]
+A single Client object with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Client to fetch.
+
+### Retrieve an Client [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "id": 237,
+                "ui_id": "clientB",
+                "name": "ClientB",
+                "state": "active",
+                "billing_location": "US",
+                "billing_currency": "EUR",
+                "contact_email": "joe@ifeelgoods.com",
+                "contact_phone": "+11234567890",
+                "locale": "en",
+                "website": "",
+                "operating_countries": [
+                    "FR"
+                ],
+                "medias": {
+                    "logo": {
+                        "en": {
+                            "raw": {
+                                "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/3ef949388e6a5388579649fb7bc0c70b.png/raw.png",
+                                "size": "250x78",
+                                "content_type": "image/png"
+                            }
+                        }
+                    }
+                },
+                "promotions": []
+            }
+
+
+## Clients Stats [/fulfillment/v2/clients/{id}/stats?end_date={end_date}&start_date={start_date}&format={format}&interval={interval}&states={states}]
+Redemptions Stats for a single Client object
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Client to fetch redemption activity stats for.
+    + start_date (optional, ISO-8601 Date, `2014-10-21T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted 
+    + end_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted 
+    + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
+    + format (optional, enum, `json`) ... Format in which the data is returned - values : `json` , `csv`
+    + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
+
+### Retrieve Clients Stats[GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                data: [
+                    {
+                        timeframe: {
+                            start: "2014-10-21T00:00:00+01:00",
+                            end: "2014-10-22T00:00:00+01:00"
+                        },
+                        values: [
+                            {
+                                states: {
+                                    redeemed: 123
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        timeframe: {
+                            start: "2014-10-22T00:00:00+01:00",
+                            end: "2014-10-23T00:00:00+01:00"
+                        },
+                        values: [
+                            {
+                                states: {
+                                    redeemed: 456
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
+# Group Rewards
+Rewards related resources of the **Fulfillment API**
+
+## Rewards Collection [/fulfillment/v2/rewards]
+### List all Rewards [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+    
+            {
+                "data": [
+                    {
+                        "id": 417,
+                        "denomination": "1 App",
+                        "label": "Akinator the genius IOS App",
+                        "cost": 1.99,
+                        "cost_currency": "USD",
+                        "face_value": 1.99,
+                        "categories": [
+                            "Apps/eBooks/Music"
+                        ],
+                        "country": [
+                            "US"
+                        ],
+                        "targeting": {
+                            "gender": [
+                                "female",
+                                "male"
+                            ],
+                            "age_range": [
+                                "18",
+                                "18-24",
+                                "25-34",
+                                "35-44",
+                                "45-54",
+                                "55+"
+                            ],
+                            "reach": "More than 500 millions people have an App Store account ",
+                            "average": "Men & Women between 15 and 45 years old "
+                        },
+                        "image_badge": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/246d715d5a9b5ed3a40fc714b4a6807d.jpg/raw.jpg"
+                    },{
+                        "id": 147,
+                        "denomination": "$10",
+                        "label": "$10 Bass Pro Code",
+                        "cost": 10,
+                        "cost_currency": "USD",
+                        "face_value": 10,
+                        "categories": [
+                            "Sports & Outdoors"
+                        ],
+                        "country": [
+                            "US"
+                        ],
+                        "targeting": {
+                            "gender": [
+                                "male"
+                            ],
+                            "age_range": [
+                                "35-44",
+                                "35-44"
+                            ],
+                            "reach": "Up to 3M visits a month on basspro.com ",
+                            "average": "Male between 35 and 44 years old"
+                        },
+                        "image_badge": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/618a3b265a01d6ae43f5b3364a31fd41.png/raw.png"
+                    }
+                ]
+            }
+
+## Rewards [/fulfillment/v2/rewards/{sku}]
+A single Reward object with all its details
+
++ Parameters
+    + sku (required, string, `417`) ... String `sku` of the Reward to fetch.
+
+### Retrieve a Reward [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": 417,
+                    "denomination": "1 App",
+                    "label": "Akinator the genius IOS App",
+                    "cost": 1.99,
+                    "cost_currency": "USD",
+                    "face_value": 1.99,
+                    "categories": [
+                        "Apps/eBooks/Music"
+                    ],
+                    "country": [
+                        "US"
+                    ],
+                    "targeting": {
+                        "gender": [
+                            "female",
+                            "male"
+                        ],
+                        "age_range": [
+                            "18",
+                            "18-24",
+                            "25-34",
+                            "35-44",
+                            "45-54",
+                            "55+"
+                        ],
+                        "reach": "More than 500 millions people have an App Store account ",
+                        "average": "Men & Women between 15 and 45 years old "
+                    },
+                    "image_badge": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/246d715d5a9b5ed3a40fc714b4a6807d.jpg/raw.jpg",
+                    "description": "Akinator... the Genie is back!\r\n<br>\r\nAkinator can read your mind and tell you what character you are thinking about, just by asking a few questions. Think of a real or fictional character and Akinator will try to guess who it is. Will you dare challenge the Genie?\r\n<br><br>\r\nCustomize people you know (name and picture) to impress your friends, share your results on Facebook, discover the new Akinometer... and much more in the updates to come. Turn on the child filter to let your children play safely. \r\n",
+                    "may_expire": false,
+                    "need_brand_approval": false,
+                    "order_delay": "2",
+                    "terms_and_conditions": "http://www.apple.com/legal/internet-services/itunes/us/terms.html ",
+                    "tags": {},
+                    "medias": {
+                        "card": {},
+                        "selector": {},
+                        "filler": {},
+                        "logo": {
+                            "en": {
+                                "id": 668,
+                                "raw": {
+                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/8b76ff16039f7dac42a9a0abbd3059c4.png/raw.png",
+                                    "size": "60x60",
+                                    "content_type": "image/png"
+                                }
+                            }
+                        },
+                        "round_card": {
+                            "en": {
+                                "id": 669,
+                                "raw": {
+                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/f85a5b2022069dc2111c84019d3e9130.jpg/raw.jpg",
+                                    "size": "300x300",
+                                    "content_type": "image/jpg"
+                                }
+                            }
+                        },
+                        "reward_provider_logo": {},
+                        "catalog_badge": {
+                            "en": {
+                                "id": 670,
+                                "raw": {
+                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/246d715d5a9b5ed3a40fc714b4a6807d.jpg/raw.jpg",
+                                    "size": "",
+                                    "content_type": "image/jpg"
+                                }
+                            }
+                        },
+                        "catalog_card": {
+                            "en": {
+                                "id": 671,
+                                "raw": {
+                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/00f0fdf781487c7efb7544ff3dc31a14.png/raw.png",
+                                    "size": "",
+                                    "content_type": "image/png"
+                                }
+                            }
+                        }
+                    },
+                    "private": false
+                }
+            }
+
+# Group Promotions
+Promotions related resources of the **Fulfillment API**
+
+## Promotion [/fulfillment/v2/promotions/{id}]
+A single promotion object with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+
+### Retrieve a Promotion [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            { TBD }
+            
++ Response 403 (application/json)
+
+    + Body
+    
+            { TBD }
+
+## Promotion Stats [/fulfillment/v2/promotions/{id}/stats?end_date={end_date}&start_date={start_date}&format={format}&interval={interval}&states={states}]
+Redemptions Stats for a single Promotion object
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + start_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted 
+    + end_date (optional, ISO-8601 Date, `2014-10-24T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted 
+    + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
+    + format (optional, enum, `json`) ... Format in which the data is returned - values : `json` , `csv`
+    + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
+
+### Retrieve Promotion Stats[GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                data: [
+                    {
+                        timeframe: {
+                            start: "2014-10-21T00:00:00+01:00",
+                            end: "2014-10-22T00:00:00+01:00"
+                        },
+                        values: [
+                            {
+                                states: {
+                                    redeemed: 123
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        timeframe: {
+                            start: "2014-10-22T00:00:00+01:00",
+                            end: "2014-10-23T00:00:00+01:00"
+                        },
+                        values: [
+                            {
+                                states: {
+                                    redeemed: 456
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
+
+## Promotion Reward Stats [/fulfillment/v2/promotions/{id}/rewards/{sku}/stats?end_date={end_date}&start_date={start_date}&format={format}&interval={interval}&states={states}]
+Redemptions Stats for a single Reward within a Promotion object
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+    + start_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted 
+    + end_date (optional, ISO-8601 Date, `2014-10-24T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted 
+    + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
+    + format (optional, enum, `json`) ... Format in which the data is returned - values : `json` , `csv`
+    + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
+
+### Retrieve per Reward Promotion Stats[GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                data: [
+                    {
+                        timeframe: {
+                            start: "2014-10-21T00:00:00+01:00",
+                            end: "2014-10-22T00:00:00+01:00"
+                        },
+                        values: [
+                            {
+                                states: {
+                                    redeemed: 123
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        timeframe: {
+                            start: "2014-10-22T00:00:00+01:00",
+                            end: "2014-10-23T00:00:00+01:00"
+                        },
+                        values: [
+                            {
+                                states: {
+                                    redeemed: 456
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
++ Response 403 (application/json)
+
+    + Body
+    
+            { TBD }
+
+## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions]
+Redemption object for a Reward under a Promotion
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+
+### List the redemptions for a Reward under the Promotion [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            { TBD }
+            
++ Response 403 (application/json)
+
+    + Body
+    
+            { TBD }
+
+## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions Body : {"data" : {"order_id" : order_id}}]
+Redemption object for a Reward under a Promotion
+
+### Create or Find a redeemed redemption for a Reward under the Promotion [POST]
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+    + order_id (required, string, `XYZ123`) ... Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc)
+
++ Request
+    + Header
+
+            Content-Type: application/json
+
+    + Body
+            
+            {
+                `data` : {
+                    `order_id` : order_id,
+                }
+            }
+
+
++ Response 201 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "T4ZJ3-YXBMC",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/T4ZJ3-YXBMC",
+                    "state": "pending",
+                    "order_id": "XYZ123",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
+                    "redeemed_datetime": null,
+                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": {
+                        "sku": "APP-ITU-10USD-US",
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "user": null,
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ]
+                }
+            }
+            
+
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "T4ZJ3-YXBMC",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/T4ZJ3-YXBMC",
+                    "state": "pending",
+                    "order_id": "XYZ123",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
+                    "redeemed_datetime": null,
+                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": {
+                        "sku": "APP-ITU-10USD-US",
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "user": null,
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ]
+                }
+            }
+
++ Response 403 (application/json)
+
+    + Body
+    
+            { TBD }
+
+## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions/redeem - Body : {"data" : {"order_id" : {order_id}, "user" : {"email" : {email}, "phone_number" : {phone_number}, "first_name" : {first_name}, "last_name" : {last_name}}}}]
+A __*redeemed*__ Redemption object for a Reward under a Promotion
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+    + order\_id (required, string, `XYZ123`) ... Unique transaction\_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc)
+    + provider (required, string) ... Identity provider of user to send the reward to
+        + Values
+            - `email`
+    + uid (required, string, ``) ... User Id of user to send the reward to, used for fraud detection and promotion rules enforcement
+    
+### Create or Find a redeemed redemption for a Reward under the Promotion[POST]
++ Request
+    + Header
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "order_id": "XYZ123-01",
+                    "user": {
+                        "email": "apisupport@ifeelgoods.com",
+                        "phone_number": "+16502899294",
+                        "first_name": "James",
+                        "last_name": "Brown"
+                    }
+                }
+            }
+
++ Response 201 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "HTM9V-U6CE8",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/HTM9V-U6CE8",
+                    "state": "redeemed",
+                    "order_id": "XYZ123-01",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:30:03.000-08:00",
+                    "redeemed_datetime": "2015-01-27T07:38:25.000-08:00",
+                    "updated_datetime": "2015-01-27T07:38:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": {
+                        "sku": "APP-ITU-10USD-US",
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "user": {
+                        "id": 4
+                    },
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ],
+                    "reward_codes": {
+                        "type": "unique_code",
+                        "codes": [
+                            {
+                                "name": "Gift Card Number",
+                                "value": "ABCD-1234-WXYZ-5101",
+                                "format": "string",
+                                "usage": "primary"
+                            }
+                        ]
+                    }
+                }
+            }
+            
+
++ Response 403 (application/json)
+
+    + Body
+    
+            { TBD }
+
+## List Redemptions for a Promotion [/fulfillment/v2/promotions/{id}/redemptions]
+Redemption object for a Reward under a Promotion
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+
+### List the redemptions under the Promotion [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            { TBD }
+
+# Group Redemptions
+Redemptions related resources of the **Fulfillment API**
+
+## Redemption [/fulfillment/v2/redemptions/{id}]
+A single redemption object with all its details
+
++ Parameters
+    + id (required, string, `IFEEL-GOODS`) ... `id` of the Redemption.
+
+### Retrieve a Redemption [GET]
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "T4ZJ3-YXBMC",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/T4ZJ3-YXBMC",
+                    "state": "pending",
+                    "order_id": "XYZ123",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
+                    "redeemed_datetime": null,
+                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": {
+                        "sku": "APP-ITU-10USD-US",
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "user": null,
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ]
+                }
+            }
