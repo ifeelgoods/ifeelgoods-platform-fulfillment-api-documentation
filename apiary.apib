@@ -245,22 +245,11 @@ which leads to the same `response` :
 }
 ```
 
-# API Routes
-
 # Group Oauth Tokens
 Token lifecycle operations from `Oauth endpoint`
 
-## Create Oauth Token [/oauth/token{Body:api_key,api_secret,grant_type}]
+## Oauth Token [/oauth/token]
 Grab a new oauth token using your api credentials
-
-+ Parameters
-
-    + api_key (required, string, `ABC123`) ... API Key identifier for Oauth handshake
-    + api_secret (required, string, `####`) ... API Secret for Oauth handshake
-    + grant\_type (required, string) ... Type of token requested
-    
-        + Values
-            + `account_application`
 
 ### Retrieve Token [POST]
 + Request
@@ -268,9 +257,9 @@ Grab a new oauth token using your api credentials
     + Body
     
             {
-                "client\_id" : api_key,
-                "client\_secret" : api_secret,
-                "grant\_type" : "account\_application"
+                "api_key": "ABC",
+                "api_secret": "123",
+                "grant\_type": "account\_application"
             }
 
 
@@ -296,7 +285,7 @@ Unrecognized or Invalid credentials
                 "error_description":"Client authentication failed due to unknown client, no client authentication included, or unsupported authentication method."
             }
 
-## Oauth Token Information [/oauth/token/info{Body: token}]
+## Oauth Token Information [/oauth/token/info]
 Grab the information(expiration time, account associated with the token, etc) for a given Token.
 
 + Parameters
@@ -325,14 +314,18 @@ Grab the information(expiration time, account associated with the token, etc) fo
                 "error_description":"The request is missing a required parameter, includes an unsupported parameter value, or is otherwise malformed."
             }
 
-## Revoke Oauth Token [/oauth/revoke{Body : token}]
+## Revoke Oauth Token [/oauth/revoke]
 Grab the information(expiration time, account associated with the token, etc) for a given Token.
 
-+ Parameters
-
-    + token (required, string, `XYZ123`) ... Token to be revoked
-
 ### Revoke Token [POST]
++ Request
+
+    + Body
+            
+            {
+                "token": "XYZ123"
+            }
+
 + Response 200 (application/json)
 
     + Body
@@ -861,14 +854,13 @@ Redemption object for a Reward under a Promotion
     
             { TBD }
 
-## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions Body : {"data" : {"order_id" : order_id}}]
-Redemption object for a Reward under a Promotion
-
 ### Create or Find a redeemed redemption for a Reward under the Promotion [POST]
+This requires a single parameter : 
+- order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123" 
+
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
     + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
-    + order_id (required, string, `XYZ123`) ... Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc)
 
 + Request
     + Header
@@ -965,18 +957,20 @@ Redemption object for a Reward under a Promotion
     
             { TBD }
 
-## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions/redeem - Body : {"data" : {"order_id" : {order_id}, "user" : {"email" : {email}, "phone_number" : {phone_number}, "first_name" : {first_name}, "last_name" : {last_name}}}}]
+## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions/redeem]
 A __*redeemed*__ Redemption object for a Reward under a Promotion
+
+The following information is required : 
+- order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123"
+- user[email] : "james.brown@example.com"
+- user[phone_number] : "+11234567890"
+- user[first_name] : "James"
+- user[last_name] : "Brown"
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
     + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
-    + order\_id (required, string, `XYZ123`) ... Unique transaction\_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc)
-    + provider (required, string) ... Identity provider of user to send the reward to
-        + Values
-            - `email`
-    + uid (required, string, ``) ... User Id of user to send the reward to, used for fraud detection and promotion rules enforcement
-    
+
 ### Create or Find a redeemed redemption for a Reward under the Promotion[POST]
 + Request
     + Header
@@ -989,8 +983,8 @@ A __*redeemed*__ Redemption object for a Reward under a Promotion
                 "data": {
                     "order_id": "XYZ123-01",
                     "user": {
-                        "email": "apisupport@ifeelgoods.com",
-                        "phone_number": "+16502899294",
+                        "email": "james.brown@example.com",
+                        "phone_number": "+11234567890",
                         "first_name": "James",
                         "last_name": "Brown"
                     }
