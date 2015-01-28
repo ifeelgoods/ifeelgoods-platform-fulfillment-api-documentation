@@ -89,7 +89,7 @@ Using the credentials, we'll request a `Token` from the oauth endpoint:
 ```
 curl 'https://oauth-sandbox.ifeelgoods.com/oauth/token' \
     -H 'Content-Type: application/json' \
-    -d '{"client_id":"bfc0ca8e10eed90f74fece44346c18004ea75794181979efd5bb91abe9db8e0e", "client_secret":"#####", "grant_type":"account_application"}'
+    -d '{"client_id":"592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72", "client_secret":"1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755", "grant_type":"account_application"}'
 ```
 and the `response` is :
 
@@ -194,8 +194,8 @@ Let's include the API Key and Secret directly in the request.
 ```
 curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/user' \
     -H 'Content-Type: application/json' \
-    -H 'Api-Key: bfc0ca8e10eed90f74fece44346c18004ea75794181979efd5bb91abe9db8e0e' \
-    -H 'Api-Secret: ###' \
+    -H 'Api-Key: 592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72' \
+    -H 'Api-Secret: 1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755' \
     -d '{ "data": { "provider": "email", "uid": "apisupport@ifeelgoods.com" } }'
 ```
 
@@ -259,11 +259,15 @@ The following parameters are required :
 ### Retrieve Token [POST]
 + Request
 
+    + Headers
+    
+            Content-Type : application/json
+
     + Body
     
             {
-                "api_key": "ABC",
-                "api_secret": "123",
+                "client_id": "592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72",
+                "client_secret": "1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755",
                 "grant_type": "account_application"
             }
 
@@ -292,22 +296,30 @@ Unrecognized or Invalid credentials
 ## Oauth Token Information [/oauth/token/info]
 Grab the information(expiration time, account associated with the token, etc) for a given Token.
 
-+ Parameters
-
-    + token (required, string, `XYZ123`) ... Token to get information about
+The authentication token needs to be provided in the 'AUTHORIZATION' header :
+- token : Token to get information about
 
 ### Retrieve Token Info [GET]
++ Request
+
+    + Headers
+    
+            AUTHORIZATION : Bearer <token>
+            
+
 + Response 200 (application/json)
 
     + Body
     
             {
-                "resource\_owner\_id": 1,
+                "resource_owner_id": 100050,
                 "scopes": [],
-                "expires\_in\_seconds": 6090,
+                "expires_in_seconds": 1478,
                 "application": {
-                "uid": "49a3c93ea993f07c4f78af8bcf237e667a6cf796b8bf98eab87ca89ea9e8996d"}
+                    "uid": "592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72"
+                }
             }
+
 
 + Response 401
 
@@ -324,6 +336,10 @@ Grab the information(expiration time, account associated with the token, etc) fo
 ### Revoke Token [POST]
 + Request
 
+    + Headers
+    
+            Content-Type : application/json
+
     + Body
 
             {
@@ -334,9 +350,7 @@ Grab the information(expiration time, account associated with the token, etc) fo
 
     + Body
     
-            {
-                "logout_url": "http://sandbox.ifeelgoods.com/logout"
-            }
+            {}
 
 + Response 401
 
@@ -354,6 +368,14 @@ Accounts related resources of the **Fulfillment API** from `API endpoint`
 The details associated with your current account
 
 ### Retrieve the current Account [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
 
     + Header
@@ -377,6 +399,14 @@ Clients related resources of the **Fulfillment API**
 
 ## Clients Collection [/fulfillment/v2/clients]
 ### List all Clients [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -439,6 +469,14 @@ A single Client object with all its details
     + id (required, number, `1`) ... Numeric `id` of the Client to fetch.
 
 ### Retrieve an Client [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -487,6 +525,14 @@ Redemptions Stats for a single Client object
     + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
 
 ### Retrieve Clients Stats[GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -531,6 +577,14 @@ Rewards related resources of the **Fulfillment API**
 
 ## Rewards Collection [/fulfillment/v2/rewards]
 ### List all Rewards [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -606,6 +660,14 @@ A single Reward object with all its details
     + sku (required, string, `417`) ... String `sku` of the Reward to fetch.
 
 ### Retrieve a Reward [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -710,6 +772,14 @@ A single promotion object with all its details
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
 
 ### Retrieve a Promotion [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -737,6 +807,14 @@ Redemptions Stats for a single Promotion object
     + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
 
 ### Retrieve Promotion Stats[GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -790,6 +868,14 @@ Redemptions Stats for a single Reward within a Promotion object
     + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
 
 ### Retrieve per Reward Promotion Stats[GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -843,6 +929,14 @@ Redemption object for a Reward under a Promotion
     + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
 
 ### List the redemptions for a Reward under the Promotion [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -867,8 +961,12 @@ This requires a single parameter :
     + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
 
 + Request
-    + Header
 
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
             Content-Type: application/json
 
     + Body
@@ -977,8 +1075,12 @@ The following information is required :
 
 ### Create or Find a redeemed redemption for a Reward under the Promotion[POST]
 + Request
-    + Header
 
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
             Content-Type: application/json
 
     + Body
@@ -1059,6 +1161,14 @@ Redemption object for a Reward under a Promotion
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
 
 ### List the redemptions under the Promotion [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
@@ -1078,6 +1188,14 @@ A single redemption object with all its details
     + id (required, string, `IFEEL-GOODS`) ... `id` of the Redemption.
 
 ### Retrieve a Redemption [GET]
++ Request
+
+    + Headers
+        
+            AUTHORIZATION : Bearer <token>
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
 + Response 200 (application/json)
     + Header
 
