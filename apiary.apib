@@ -48,7 +48,7 @@ To get your credentials, please reach out to your [Ifeelgoods contact](mailto:ap
 Two authentication methods are possible :
 
 - __Token-based authentication__ (i.e embedding an Auth Token in the headers on every request) 
-- __Header-based authentication__ (i.e embedding __*api_key*__ and __*api_secret*__ in headers on every request)
+- __Header-based authentication__ (i.e embedding __*Api-Key*__ and __*Api-Secret*__ in headers on every request)
 
 Please [contact us](mailto:apisupport@ifeelgoods.com) for more information.
 
@@ -251,6 +251,11 @@ Token lifecycle operations from `Oauth endpoint`
 ## Oauth Token [/oauth/token]
 Grab a new oauth token using your api credentials
 
+The following parameters are required :
+- api_key : __*API Key*__ identifier for Oauth handshake
+- api_secret : __*API Secret*__ for Oauth handshake
+- grant_type : Type of token requested (accepted value: `account_application`)
+
 ### Retrieve Token [POST]
 + Request
 
@@ -259,9 +264,8 @@ Grab a new oauth token using your api credentials
             {
                 "api_key": "ABC",
                 "api_secret": "123",
-                "grant\_type": "account\_application"
+                "grant_type": "account_application"
             }
-
 
 + Response 200 (application/json)
 
@@ -274,12 +278,12 @@ Grab a new oauth token using your api credentials
                 "refresh_token": null,
                 "scope": ""
             }
-            
+
 + Response 401
 Unrecognized or Invalid credentials
 
     + Body
-            
+
             {
                 "error":"invalid_client",
                 "error_description":"Client authentication failed due to unknown client, no client authentication included, or unsupported authentication method."
@@ -321,7 +325,7 @@ Grab the information(expiration time, account associated with the token, etc) fo
 + Request
 
     + Body
-            
+
             {
                 "token": "XYZ123"
             }
