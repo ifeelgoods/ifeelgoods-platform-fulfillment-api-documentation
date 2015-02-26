@@ -16,7 +16,7 @@ Two environments are supported :
 - __*Sandbox*__
 - __*Production*__
 
-We provide a [__*Status Page*__](http://status.ifeelgoods.com) where you can stay up to date on our operational status. 
+We provide a [__*Status Page*__](http://status.ifeelgoods.com) where you can stay up to date on our operational status.
 We will communicate about maintenance windows, incidents and API updates through that page so we encourage you to subscribe to one of the notification channels provided (Email, RSS, etc)
 
 ### Sandbox
@@ -47,7 +47,7 @@ To get your credentials, please reach out to your [Ifeelgoods contact](mailto:ap
 
 Two authentication methods are possible :
 
-- __Token-based authentication__ (i.e embedding an Auth Token in the headers on every request) 
+- __Token-based authentication__ (i.e embedding an Auth Token in the headers on every request)
 - __Header-based authentication__ (i.e embedding __*Api-Key*__ and __*Api-Secret*__ in headers on every request)
 
 Please [contact us](mailto:apisupport@ifeelgoods.com) for more information.
@@ -71,7 +71,7 @@ Api-Secret : API_SECRET
 ```
 
 ### Oauth2 tokens vs API Keys authentication
-API-Key authentication is meant solely for Server-to-Server interactions with this API since it requires sending the API secret on every request. 
+API-Key authentication is meant solely for Server-to-Server interactions with this API since it requires sending the API secret on every request.
 The Token-based authentication can be used for hitting the API from frontend or mobile applications.
 
 ## Quickstart
@@ -137,7 +137,7 @@ curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/
     -H 'Content-Type: application/json' \
     -H 'AUTHORIZATION:Bearer a59e7fd825c2a1e18ddc63055f7d04ceb9c555863367c00f6160cc1328f8e800' \
     -d '{ "data": { "provider": "email", "uid": "apisupport@ifeelgoods.com" } }'
-    
+
 ```
 
 which leads to this `response` :
@@ -260,11 +260,11 @@ The following parameters are required :
 + Request
 
     + Headers
-    
+
             Content-Type : application/json
 
     + Body
-    
+
             {
                 "client_id": "592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72",
                 "client_secret": "1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755",
@@ -274,7 +274,7 @@ The following parameters are required :
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "access_token": "a7eb47e73ac6eba563dbce108204203c23718d9f83f027975067cc9d5ee16912",
                 "token_type": "bearer",
@@ -303,14 +303,14 @@ The authentication token needs to be provided in the 'AUTHORIZATION' header :
 + Request
 
     + Headers
-    
+
             AUTHORIZATION : Bearer <token>
-            
+
 
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "resource_owner_id": 100050,
                 "scopes": [],
@@ -324,7 +324,7 @@ The authentication token needs to be provided in the 'AUTHORIZATION' header :
 + Response 401
 
     + Body
-    
+
             {
                 "error":"invalid_request",
                 "error_description":"The request is missing a required parameter, includes an unsupported parameter value, or is otherwise malformed."
@@ -337,7 +337,7 @@ Grab the information(expiration time, account associated with the token, etc) fo
 + Request
 
     + Headers
-    
+
             Content-Type : application/json
 
     + Body
@@ -349,13 +349,13 @@ Grab the information(expiration time, account associated with the token, etc) fo
 + Response 200 (application/json)
 
     + Body
-    
+
             {}
 
 + Response 401
 
     + Body
-    
+
             {
                 "error":"invalid_request",
                 "error_description":"The request is missing a required parameter, includes an unsupported parameter value, or is otherwise malformed."
@@ -371,7 +371,7 @@ The details associated with your current account
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -383,7 +383,7 @@ The details associated with your current account
 
     + Body
 
-            { 
+            {
                 "id": 170,
                 "login" : "jdoe",
                 "name": "John Doe",
@@ -401,7 +401,7 @@ Clients related resources of the **Fulfillment API**
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -411,7 +411,7 @@ Clients related resources of the **Fulfillment API**
             Content-Encoding : gzip
 
     + Body
-    
+
             {
                 "paging": {
                     "page": 1,
@@ -470,7 +470,7 @@ A single Client object with all its details
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -515,8 +515,8 @@ Redemptions Stats for a single Client object
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Client to fetch redemption activity stats for.
-    + start_date (optional, ISO-8601 Date, `2014-10-21T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted 
-    + end_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted 
+    + start_date (optional, ISO-8601 Date, `2014-10-21T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted
+    + end_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted
     + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
     + format (optional, enum, `json`) ... Format in which the data is returned - values : `json` , `csv`
     + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
@@ -525,7 +525,7 @@ Redemptions Stats for a single Client object
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -576,7 +576,7 @@ Rewards related resources of the **Fulfillment API**
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -586,7 +586,7 @@ Rewards related resources of the **Fulfillment API**
             Content-Encoding : gzip
 
     + Body
-    
+
             {
                 "data": [
                     {
@@ -658,7 +658,7 @@ A single Reward object with all its details
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -769,7 +769,7 @@ A single promotion object with all its details
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -781,11 +781,11 @@ A single promotion object with all its details
     + Body
 
             { TBD }
-            
+
 + Response 403 (application/json)
 
     + Body
-    
+
             { TBD }
 
 ## Promotion Stats [/fulfillment/v2/promotions/{id}/stats?end_date={end_date}&start_date={start_date}&format={format}&interval={interval}&states={states}]
@@ -793,8 +793,8 @@ Redemptions Stats for a single Promotion object
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
-    + start_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted 
-    + end_date (optional, ISO-8601 Date, `2014-10-24T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted 
+    + start_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted
+    + end_date (optional, ISO-8601 Date, `2014-10-24T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted
     + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
     + format (optional, enum, `json`) ... Format in which the data is returned - values : `json` , `csv`
     + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
@@ -803,7 +803,7 @@ Redemptions Stats for a single Promotion object
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -853,8 +853,8 @@ Redemptions Stats for a single Reward within a Promotion object
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
     + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
-    + start_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted 
-    + end_date (optional, ISO-8601 Date, `2014-10-24T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted 
+    + start_date (optional, ISO-8601 Date, `2014-10-23T00%3A00%3A00.452Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted
+    + end_date (optional, ISO-8601 Date, `2014-10-24T00%3A00%3A00.452Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted
     + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
     + format (optional, enum, `json`) ... Format in which the data is returned - values : `json` , `csv`
     + states (optional, enum, `redemeed`) ... Filter to specify the state of the redemptions to include in the stats - values : `redeemed` , `total`
@@ -863,7 +863,7 @@ Redemptions Stats for a single Reward within a Promotion object
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -909,7 +909,7 @@ Redemptions Stats for a single Reward within a Promotion object
 + Response 403 (application/json)
 
     + Body
-    
+
             { TBD }
 
 ## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions]
@@ -923,7 +923,7 @@ Redemption object for a Reward under a Promotion
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -935,16 +935,16 @@ Redemption object for a Reward under a Promotion
     + Body
 
             { TBD }
-            
+
 + Response 403 (application/json)
 
     + Body
-    
+
             { TBD }
 
 ### Create or Find a redeemed redemption for a Reward under the Promotion [POST]
-This requires a single parameter : 
-- order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123" 
+This requires a single parameter :
+- order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123"
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
@@ -953,13 +953,13 @@ This requires a single parameter :
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
             Content-Type: application/json
 
     + Body
-            
+
             {
                 `data` : {
                     `order_id` : order_id,
@@ -1003,7 +1003,7 @@ This requires a single parameter :
                     ]
                 }
             }
-            
+
 
 + Response 200 (application/json)
     + Header
@@ -1045,13 +1045,13 @@ This requires a single parameter :
 + Response 403 (application/json)
 
     + Body
-    
+
             { TBD }
 
 ## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions/redeem]
 A __*redeemed*__ Redemption object for a Reward under a Promotion
 
-The following information is required : 
+The following information is required :
 - order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123"
 - user[email] : "james.brown@example.com"
 - user[phone_number] : "+11234567890"
@@ -1066,7 +1066,7 @@ The following information is required :
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
             Content-Type: application/json
@@ -1134,12 +1134,12 @@ The following information is required :
                     }
                 }
             }
-            
+
 
 + Response 403 (application/json)
 
     + Body
-    
+
             { TBD }
 
 ## List Redemptions for a Promotion [/fulfillment/v2/promotions/{id}/redemptions]
@@ -1152,7 +1152,7 @@ Redemption object for a Reward under a Promotion
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
@@ -1178,7 +1178,7 @@ A single redemption object with all its details
 + Request
 
     + Headers
-        
+
             API-KEY : <api-key>
             API-SECRET : <api-secret>
 
