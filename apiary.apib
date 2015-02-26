@@ -114,9 +114,9 @@ and we get a `response` similar to this one :
 ```
 {
     "data": {
-        "id": 100002,
+        "id": 100050,
         "login": null,
-        "name": "API Documentation",
+        "name": "API Developers (Apiary Docs)",
         "email": "apisupport@ifeelgoods.com",
         "phone_number": "",
         "role": "user",
@@ -135,9 +135,9 @@ always available and that can be used for test driving the API.
 ```
 curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/actions/redeem' \
     -H 'Content-Type: application/json' \
+    -H 'Accept: application/json; pretty=true' \
     -H 'AUTHORIZATION:Bearer a59e7fd825c2a1e18ddc63055f7d04ceb9c555863367c00f6160cc1328f8e800' \
-    -d '{ "data": { "provider": "email", "uid": "apisupport@ifeelgoods.com" } }'
-
+    -d '{ "data": { "user": { "email": "apisupport@ifeelgoods.com" } } }'
 ```
 
 which leads to this `response` :
@@ -146,20 +146,20 @@ which leads to this `response` :
 {
     "data": {
         "id": "IFEEL-GOODS",
-        "url": "http://redemption-testing.ifeelgoods.com/#/IFEEL-GOODS",
+        "url": "https://redemption-sandbox.ifeelgoods.com/#/IFEEL-GOODS",
         "state": "redeemed",
         "order_id": "4768c272-8082-42ba-9b59-8a8ea5926a98",
         "testing": false,
-        "activation_datetime": "2014-12-22T09:41:02.000-08:00",
-        "redeemed_datetime": "2014-12-23T10:04:16.000-08:00",
-        "updated_datetime": "2014-12-23T10:04:16.000-08:00",
+        "activation_datetime": "2014-02-04T03:42:45.000-08:00",
+        "redeemed_datetime": "2014-02-04T03:42:45.000-08:00",
+        "updated_datetime": "2014-02-04T03:42:45.000-08:00",
         "promotion": {
             "id": 1,
             "status": "enabled",
             "state": "ready"
         },
         "reward": {
-            "sku": "PAY-PAY-10USD-US",
+            "sku": "GOO-GOO-5USD-US",
             "status": "enabled",
             "state": "ready"
         },
@@ -167,10 +167,11 @@ which leads to this `response` :
             "id": 1
         },
         "authentication_systems": [
-            "facebook_connect",
             "email"
         ],
-        "notification_channels": [],
+        "notification_channels": [
+            "email"
+        ],
         "reward_codes": {
             "type": "unique_code",
             "codes": [
@@ -192,11 +193,12 @@ Happy customer :-)
 Let's include the API Key and Secret directly in the request.
 
 ```
-curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/user' \
+curl 'https://api-sandbox.ifeelgoods.com/fulfillment/v2/redemptions/IFEEL-GOODS/actions/redeem' \
     -H 'Content-Type: application/json' \
+    -H 'Accept: application/json; pretty=true' \
     -H 'Api-Key: 592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72' \
     -H 'Api-Secret: 1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755' \
-    -d '{ "data": { "provider": "email", "uid": "apisupport@ifeelgoods.com" } }'
+    -d '{ "data": { "user": { "email": "apisupport@ifeelgoods.com" } } }'
 ```
 
 which leads to the same `response` :
@@ -205,20 +207,20 @@ which leads to the same `response` :
 {
     "data": {
         "id": "IFEEL-GOODS",
-        "url": "http://redemption-testing.ifeelgoods.com/#/IFEEL-GOODS",
+        "url": "https://redemption-sandbox.ifeelgoods.com/#/IFEEL-GOODS",
         "state": "redeemed",
         "order_id": "4768c272-8082-42ba-9b59-8a8ea5926a98",
         "testing": false,
-        "activation_datetime": "2014-12-22T09:41:02.000-08:00",
-        "redeemed_datetime": "2014-12-23T10:04:16.000-08:00",
-        "updated_datetime": "2014-12-23T10:04:16.000-08:00",
+        "activation_datetime": "2014-02-04T03:42:45.000-08:00",
+        "redeemed_datetime": "2014-02-04T03:42:45.000-08:00",
+        "updated_datetime": "2014-02-04T03:42:45.000-08:00",
         "promotion": {
             "id": 1,
             "status": "enabled",
             "state": "ready"
         },
         "reward": {
-            "sku": "PAY-PAY-10USD-US",
+            "sku": "GOO-GOO-5USD-US",
             "status": "enabled",
             "state": "ready"
         },
@@ -226,10 +228,11 @@ which leads to the same `response` :
             "id": 1
         },
         "authentication_systems": [
-            "facebook_connect",
             "email"
         ],
-        "notification_channels": [],
+        "notification_channels": [
+            "email"
+        ],
         "reward_codes": {
             "type": "unique_code",
             "codes": [
@@ -648,7 +651,7 @@ Rewards related resources of the **Fulfillment API**
                 ]
             }
 
-## Rewards [/fulfillment/v2/rewards/{sku}]
+## Reward [/fulfillment/v2/rewards/{sku}]
 A single Reward object with all its details
 
 + Parameters
@@ -758,6 +761,35 @@ A single Reward object with all its details
 
 # Group Promotions
 Promotions related resources of the **Fulfillment API**
+
+## Promotions Collection [/fulfillment/v2/clients/{id}/promotions/]
+List of promotion objects
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Client to perform action with. Has example value.
+
+### Retrieve the list of Promotions for a given Client [GET]
++ Request
+
+    + Headers
+
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            { TBD }
+
++ Response 403 (application/json)
+
+    + Body
+
+            { TBD }
 
 ## Promotion [/fulfillment/v2/promotions/{id}]
 A single promotion object with all its details
@@ -912,8 +944,62 @@ Redemptions Stats for a single Reward within a Promotion object
 
             { TBD }
 
-## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions]
-Redemption object for a Reward under a Promotion
+# Group Redemptions
+Redemptions related resources of the **Fulfillment API**
+
+## Redemption [/fulfillment/v2/redemptions/{id}]
+A single redemption object with all its details
+
++ Parameters
+    + id (required, string, `IFEEL-GOODS`) ... `id` of the Redemption.
+
+### Retrieve a Redemption [GET]
++ Request
+
+    + Headers
+
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "T4ZJ3-YXBMC",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/T4ZJ3-YXBMC",
+                    "state": "pending",
+                    "order_id": "XYZ123",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
+                    "redeemed_datetime": null,
+                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": {
+                        "sku": "APP-ITU-10USD-US",
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "user": null,
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ]
+                }
+            }
+
+## Create Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions]
+Create a Redemption object for a Reward under a Promotion
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
@@ -1048,7 +1134,7 @@ This requires a single parameter :
 
             { TBD }
 
-## Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions/redeem]
+## Create Redeemed Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions/actions/redeem]
 A __*redeemed*__ Redemption object for a Reward under a Promotion
 
 The following information is required :
@@ -1142,7 +1228,7 @@ The following information is required :
 
             { TBD }
 
-## List Redemptions for a Promotion [/fulfillment/v2/promotions/{id}/redemptions]
+## Redemptions Collection under a Promotion [/fulfillment/v2/promotions/{id}/redemptions]
 Redemption object for a Reward under a Promotion
 
 + Parameters
@@ -1164,57 +1250,3 @@ Redemption object for a Reward under a Promotion
     + Body
 
             { TBD }
-
-# Group Redemptions
-Redemptions related resources of the **Fulfillment API**
-
-## Redemption [/fulfillment/v2/redemptions/{id}]
-A single redemption object with all its details
-
-+ Parameters
-    + id (required, string, `IFEEL-GOODS`) ... `id` of the Redemption.
-
-### Retrieve a Redemption [GET]
-+ Request
-
-    + Headers
-
-            API-KEY : <api-key>
-            API-SECRET : <api-secret>
-
-+ Response 200 (application/json)
-    + Header
-
-            Content-Encoding : gzip
-
-    + Body
-
-            {
-                "data": {
-                    "id": "T4ZJ3-YXBMC",
-                    "url": "https://redemption-sandbox.ifeelgoods.com/#/T4ZJ3-YXBMC",
-                    "state": "pending",
-                    "order_id": "XYZ123",
-                    "testing": false,
-                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
-                    "redeemed_datetime": null,
-                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
-                    "promotion": {
-                        "id": 1,
-                        "status": "enabled",
-                        "state": "ready"
-                    },
-                    "reward": {
-                        "sku": "APP-ITU-10USD-US",
-                        "status": "enabled",
-                        "state": "ready"
-                    },
-                    "user": null,
-                    "authentication_systems": [
-                        "email"
-                    ],
-                    "notification_channels": [
-                        "email"
-                    ]
-                }
-            }
