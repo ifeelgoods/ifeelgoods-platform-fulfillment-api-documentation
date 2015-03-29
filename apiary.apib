@@ -998,8 +998,8 @@ A single redemption object with all its details
                 }
             }
 
-## Create Redemption [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions]
-Create a Redemption object for a Reward under a Promotion
+## Create Redemption for Single-Choice Promotion [/fulfillment/v2/promotions/{id}/rewards/{sku}/redemptions]
+Create a Redemption object for a Reward under a single-choice Promotion
 
 <!-- + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
@@ -1250,3 +1250,134 @@ Redemption object for a Reward under a Promotion
     + Body
 
             { TBD }
+            
+
+### Create or retrieve a pending redemption under a Multi-Choice Promotion [POST]
+This requires a single parameter :
+- order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123"
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    
++ Request
+
+    + Headers
+
+            API-KEY : <api-key>
+            API-SECRET : <api-secret>
+            Content-Type: application/json
+
+    + Body
+
+            {
+                `data` : {
+                    `order_id` : order_id,
+                }
+            }
+
+
++ Response 201 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "T4ZJ3-YXBMC",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/ABCDE-FGHIJ",
+                    "state": "pending",
+                    "order_id": "order_id",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
+                    "redeemed_datetime": null,
+                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": null,
+                    "available_rewards": [
+                        {
+                            "sku": "APP-ITU-10USD-US",
+                            "status": "enabled",
+                            "state": "ready"
+                        },
+                        {
+                            "sku": "GOO-GOO-1000JPY-JP",
+                            "status": "enabled",
+                            "state": "ready"
+                        }
+                    ],
+                    "user": {
+                        "id" : null,
+                    },
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ],
+                    "state_details": null
+                }
+            }
+
+
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": "T4ZJ3-YXBMC",
+                    "url": "https://redemption-sandbox.ifeelgoods.com/#/ABCDE-FGHIJ",
+                    "state": "pending",
+                    "order_id": "order_id",
+                    "testing": false,
+                    "activation_datetime": "2015-01-27T07:20:24.000-08:00",
+                    "redeemed_datetime": null,
+                    "updated_datetime": "2015-01-27T07:20:25.000-08:00",
+                    "promotion": {
+                        "id": 1,
+                        "status": "enabled",
+                        "state": "ready"
+                    },
+                    "reward": null,
+                    "available_rewards": [
+                        {
+                            "sku": "APP-ITU-10USD-US",
+                            "status": "enabled",
+                            "state": "ready"
+                        },
+                        {
+                            "sku": "GOO-GOO-1000JPY-JP",
+                            "status": "enabled",
+                            "state": "ready"
+                        }
+                    ],
+                    "user": {
+                        "id" : null,
+                    },
+                    "authentication_systems": [
+                        "email"
+                    ],
+                    "notification_channels": [
+                        "email"
+                    ],
+                    "state_details": null
+                }
+            }
+
++ Response 403 (application/json)
+
+    + Body
+    
+            {
+                "error_message": "You do not have access."
+            }
+
