@@ -594,17 +594,21 @@ Rewards related resources of the **Fulfillment API**
             {
                 "data": [
                     {
-                        "id": 417,
-                        "denomination": "1 App",
-                        "label": "Akinator the genius IOS App",
-                        "cost": 1.99,
+                        "sku": "APP-ITC-10USD-US",
+                        "denomination": "$10",
+                        "name": "$10 iTunes® Code",
+                        "cost": "10.0",
                         "cost_currency": "USD",
-                        "face_value": 1.99,
+                        "face_value": "10.0",
                         "categories": [
+                            "Entertainment & Games",
                             "Apps/eBooks/Music"
                         ],
                         "country": [
                             "US"
+                        ],
+                        "tags": [
+                            "featured"
                         ],
                         "targeting": {
                             "gender": [
@@ -612,42 +616,27 @@ Rewards related resources of the **Fulfillment API**
                                 "male"
                             ],
                             "age_range": [
-                                "18",
                                 "18-24",
-                                "25-34",
-                                "35-44",
-                                "45-54",
-                                "55+"
+                                "25-34"
                             ],
-                            "reach": "More than 500 millions people have an App Store account ",
-                            "average": "Men & Women between 15 and 45 years old "
+                            "reach": "500 Millions App Store Account"
                         },
-                        "image_badge": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/246d715d5a9b5ed3a40fc714b4a6807d.jpg/raw.jpg"
-                    },{
-                        "id": 147,
-                        "denomination": "$10",
-                        "label": "$10 Bass Pro Code",
-                        "cost": 10,
-                        "cost_currency": "USD",
-                        "face_value": 10,
-                        "categories": [
-                            "Sports & Outdoors"
-                        ],
-                        "country": [
-                            "US"
-                        ],
-                        "targeting": {
-                            "gender": [
-                                "male"
-                            ],
-                            "age_range": [
-                                "35-44",
-                                "35-44"
-                            ],
-                            "reach": "Up to 3M visits a month on basspro.com ",
-                            "average": "Male between 35 and 44 years old"
+                        "catalog_badge": {
+                            "en": {
+                                "id": 3309,
+                                "raw": {
+                                    "url": "//s3.amazonaws.com/ifg-s3-sandbox/media/226f8953c68d843201e84cd2574b0c1a/f151a97d0f8b27bf6170891d4c4c56ff.png/raw.png",
+                                    "size": "",
+                                    "content_type": "image/png"
+                                }
+                            }
                         },
-                        "image_badge": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/618a3b265a01d6ae43f5b3364a31fd41.png/raw.png"
+                        "description": "iTunes Gift Cards are the perfect way to give the gift of entertainment! <br><br> Reward your customers with iTunes Gift Codes, which allow users to shop for everything in the iTunes Store : music, movies, TV shows, apps, books, and more ! <br><br> Get the most of your ad dollars by using official iTunes creative and benefit from Apple’s great brand awareness!\r\n",
+                        "need_brand_approval": true,
+                        "order_delay_in_days": "14",
+                        "terms_and_conditions_url": "http://www.apple.com/legal/internet-services/itunes/us/terms.html#GIFTS",
+                        "terms_and_conditions": null,
+                        "private": false
                     }
                 ]
             }
@@ -656,7 +645,7 @@ Rewards related resources of the **Fulfillment API**
 A single Reward object with all its details
 
 + Parameters
-    + sku (required, string, `417`) ... String `sku` of the Reward to fetch.
+    + sku (required, string, `APP-ITC-10USD-US`) ... String `sku` of the Reward to fetch.
 
 ### Retrieve a Reward [GET]
 + Request
@@ -675,17 +664,21 @@ A single Reward object with all its details
 
             {
                 "data": {
-                    "id": 417,
-                    "denomination": "1 App",
-                    "label": "Akinator the genius IOS App",
-                    "cost": 1.99,
+                    "sku": "APP-ITC-10USD-US",
+                    "denomination": "$10",
+                    "name": "$10 iTunes® Code",
+                    "cost": "10.0",
                     "cost_currency": "USD",
-                    "face_value": 1.99,
+                    "face_value": "10.0",
                     "categories": [
+                        "Entertainment & Games",
                         "Apps/eBooks/Music"
                     ],
                     "country": [
                         "US"
+                    ],
+                    "tags": [
+                        "featured"
                     ],
                     "targeting": {
                         "gender": [
@@ -693,69 +686,26 @@ A single Reward object with all its details
                             "male"
                         ],
                         "age_range": [
-                            "18",
                             "18-24",
-                            "25-34",
-                            "35-44",
-                            "45-54",
-                            "55+"
+                            "25-34"
                         ],
-                        "reach": "More than 500 millions people have an App Store account ",
-                        "average": "Men & Women between 15 and 45 years old "
+                        "reach": "500 Millions App Store Account"
                     },
-                    "image_badge": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/246d715d5a9b5ed3a40fc714b4a6807d.jpg/raw.jpg",
-                    "description": "Akinator... the Genie is back!\r\n<br>\r\nAkinator can read your mind and tell you what character you are thinking about, just by asking a few questions. Think of a real or fictional character and Akinator will try to guess who it is. Will you dare challenge the Genie?\r\n<br><br>\r\nCustomize people you know (name and picture) to impress your friends, share your results on Facebook, discover the new Akinometer... and much more in the updates to come. Turn on the child filter to let your children play safely. \r\n",
-                    "may_expire": false,
-                    "need_brand_approval": false,
-                    "order_delay": "2",
-                    "terms_and_conditions": "http://www.apple.com/legal/internet-services/itunes/us/terms.html ",
-                    "tags": {},
-                    "medias": {
-                        "card": {},
-                        "selector": {},
-                        "filler": {},
-                        "logo": {
-                            "en": {
-                                "id": 668,
-                                "raw": {
-                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/8b76ff16039f7dac42a9a0abbd3059c4.png/raw.png",
-                                    "size": "60x60",
-                                    "content_type": "image/png"
-                                }
-                            }
-                        },
-                        "round_card": {
-                            "en": {
-                                "id": 669,
-                                "raw": {
-                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/f85a5b2022069dc2111c84019d3e9130.jpg/raw.jpg",
-                                    "size": "300x300",
-                                    "content_type": "image/jpg"
-                                }
-                            }
-                        },
-                        "reward_provider_logo": {},
-                        "catalog_badge": {
-                            "en": {
-                                "id": 670,
-                                "raw": {
-                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/246d715d5a9b5ed3a40fc714b4a6807d.jpg/raw.jpg",
-                                    "size": "",
-                                    "content_type": "image/jpg"
-                                }
-                            }
-                        },
-                        "catalog_card": {
-                            "en": {
-                                "id": 671,
-                                "raw": {
-                                    "url": "//cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/00f0fdf781487c7efb7544ff3dc31a14.png/raw.png",
-                                    "size": "",
-                                    "content_type": "image/png"
-                                }
+                    "catalog_badge": {
+                        "en": {
+                            "id": 3309,
+                            "raw": {
+                                "url": "//s3.amazonaws.com/ifg-s3-sandbox/media/226f8953c68d843201e84cd2574b0c1a/f151a97d0f8b27bf6170891d4c4c56ff.png/raw.png",
+                                "size": "",
+                                "content_type": "image/png"
                             }
                         }
                     },
+                    "description": "iTunes Gift Cards are the perfect way to give the gift of entertainment! <br><br> Reward your customers with iTunes Gift Codes, which allow users to shop for everything in the iTunes Store : music, movies, TV shows, apps, books, and more ! <br><br> Get the most of your ad dollars by using official iTunes creative and benefit from Apple’s great brand awareness!\r\n",
+                    "need_brand_approval": true,
+                    "order_delay_in_days": "14",
+                    "terms_and_conditions_url": "http://www.apple.com/legal/internet-services/itunes/us/terms.html#GIFTS",
+                    "terms_and_conditions": null,
                     "private": false
                 }
             }
@@ -767,7 +717,7 @@ Promotions related resources of the **Fulfillment API**
 List of promotion objects
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Client to perform action with. Has example value.
+    + id (required, number, `56`) ... Numeric `id` of the Client to perform action with. Has example value.
 
 ### Retrieve the list of Promotions for a given Client [GET]
 + Request
@@ -796,7 +746,7 @@ List of promotion objects
 A single promotion object with all its details
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
 
 ### Retrieve a Promotion [GET]
 + Request
@@ -825,7 +775,7 @@ A single promotion object with all its details
 Redemptions Stats for a single Promotion object
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
     + start_date (optional, ISO-8601 Date, `2014-10-23T00:00:00Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted
     + end_date (optional, ISO-8601 Date, `2014-10-24T00:00:00Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted
     + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
@@ -884,8 +834,8 @@ Redemptions Stats for a single Promotion object
 Redemptions Stats for a single Reward within a Promotion object
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
-    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITC-10USD-US`) ... SKU of the reward
     + start_date (optional, ISO-8601 Date, `2014-10-23T00:00:00Z`) ... ISO-8601 String representing the start date for the date range for which activity stats are extracted
     + end_date (optional, ISO-8601 Date, `2014-10-24T00:00:00Z`) ... ISO-8601 String representing the end date for the date range for which activity stats are extracted
     + interval (optional, enum, `daily`) ... Aggregation granularity - daily, monthly, hourly
@@ -1034,8 +984,8 @@ This requires a single parameter :
 - order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123"
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
-    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITC-10USD-US`) ... SKU of the reward
 
 + Request
 
@@ -1146,8 +1096,8 @@ The following information is required :
 - user[last_name] : "Brown"
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
-    + sku (required, string, `APP-ITU-10USD-US`) ... SKU of the reward
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + sku (required, string, `APP-ITC-10USD-US`) ... SKU of the reward
 
 ### Create or Find a redeemed redemption for a Reward under the Promotion[POST]
 + Request
@@ -1233,7 +1183,7 @@ The following information is required :
 Redemption object for a Reward under a Promotion
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
 
 ### List the redemptions under the Promotion [GET]
 + Request
@@ -1258,7 +1208,7 @@ This requires a single parameter :
 - order_id : Unique transaction_id to identify this redemption in 3rd party systems (ecommerce transaction_id, etc), example: "ABC123"
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
     
 + Request
 
