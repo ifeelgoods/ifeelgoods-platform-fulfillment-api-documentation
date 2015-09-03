@@ -1204,3 +1204,110 @@ Redemption object for a Reward under a Promotion
 
             { TBD }
 
+
+# Group RedemptionsBatches
+Redemptions batches related resources of the **Fulfillment API**
+
+## Redemptions Batches [/fulfillment/v2/redemptions_batches/{id}]
+A single redemption batches object with all its details
+
++ Parameters
+    + id (required, number, `9`) ... `id` of the Redemptions Batches.
+
+### Retrieve a Redemptions Batch [GET]
++ Request
+
+    + Headers
+
+            Api-Key : 592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72
+            Api-Secret : 1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755
+
++ Response 200 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+            {
+                "data": {
+                    "id": 20,
+                    "amount": 100,
+                    "min_expiration_date": null,
+                    "testing": false,
+                    "state": "activation_succeeded",
+                    "promotion": {
+                        "id": 1,
+                        "name": "Sandbox Promotion"
+                    },
+                    "reward": {
+                        "sku": "PAY-PAY-001",
+                        "name": "$5 PayPal Cash"
+                    }
+                }
+            }
+
+## Create a Redemptions Batch under a Promotion [/fulfillment/v2/promotions/{id}/redemptions_batches]
+A Redemptions Batch object for a Reward under a Promotion
+
+The following information is required :
+- amount : number of redemptions requested, example: "ABC123"
+- usage : the aim for which the batch is done, values: "redemptions_activation", "codes_extraction" - the usage restricts the actions available on a batch
+- reward[sku] : sku of the reward available in the promotion (optional)
+
++ Parameters
+    + id (required, number, `115`) ... Numeric `id` of the Promotion to perform action with. Has example value.
+
+### Create a redemptions batchs for a Reward under the Promotion[POST]
++ Request
+
+    + Headers
+
+            Api-Key : 592d49b7d6fe66dfc86eb3a54d73121f46879fadd82192541b80c4a16cefaa72
+            Api-Secret : 1e0927239ad1392533cc4274282a1c156aba77e51ed69570143c61f492c1c755
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "amount": 100,
+                    "usage": "redemptions_activation",
+                    "reward": {
+                        "sku": "PAY-PAY-001"
+                    }
+                }
+            }
+
++ Response 201 (application/json)
+    + Header
+
+            Content-Encoding : gzip
+
+    + Body
+
+
+            {
+                "data": {
+                    "id": 20,
+                    "amount": 10,
+                    "min_expiration_datetime": null,
+                    "testing": false,
+                    "state": "activation_succeeded",
+                    "promotion": {
+                        "id": 1,
+                        "name": "Sandbox Promotion"
+                    },
+                    "reward": {
+                        "sku": "PAY-PAY-001",
+                        "name": "$5 PayPal Cash"
+                    }
+                }
+            }
+
+
++ Response 403 (application/json)
+
+    + Body
+
+            { TBD }
