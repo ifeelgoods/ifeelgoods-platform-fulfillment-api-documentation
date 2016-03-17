@@ -635,9 +635,8 @@ definitions:
     type: object
     properties:
       id:
-        type: integer
-        format: int32
-        example: 56
+        type: string
+        example: IFEEL-GOODS
 
   User:
     type: object
