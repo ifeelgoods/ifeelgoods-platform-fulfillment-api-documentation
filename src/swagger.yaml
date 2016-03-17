@@ -23,7 +23,7 @@ tags:
   - name: Account
     description: An __Account__ allows you to access the Ifeelgoods API. Permissions are granted based on your roles.
   - name: Reward
-    description:  A __Reward__ (aka Product SKU) is a specific denomination of a Digital or Physical Gift that can be delivered to a User. "iTunes Code 10$ (US)" is a Reward.
+    description: A __Reward__ (aka Product SKU) is a specific denomination of a Digital or Physical Gift that can be delivered to a User. "iTunes Code 10$ (US)" is a Reward.
   - name: Client
     description: A __Client__ represents a customer account that will be either retrieving or delivering __Rewards__ to end users. Inventory and Budget are set at the Client level, however one Client can run several different __Promotions__.
   - name: Promotion
