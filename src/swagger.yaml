@@ -79,6 +79,7 @@ paths:
       responses:
         200:
           $ref: '#/responses/Account'
+
   /rewards:
     get:
       tags:
@@ -108,6 +109,7 @@ paths:
           $ref: '#/responses/ErrorForbidden'
         404:
           $ref: '#/responses/ErrorNotFound'
+
   /clients:
     get:
       tags:
@@ -137,6 +139,7 @@ paths:
           $ref: '#/responses/ErrorForbidden'
         404:
           $ref: '#/responses/ErrorNotFound'
+
   /clients/{client_id}/promotions:
     get:
       tags:
@@ -167,6 +170,7 @@ paths:
           $ref: '#/responses/ErrorForbidden'
         404:
           $ref: '#/responses/ErrorNotFound'
+
   /promotions/{promotion_id}/redemptions:
     get:
       tags:
