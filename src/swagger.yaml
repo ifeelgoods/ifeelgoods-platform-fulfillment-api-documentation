@@ -13,6 +13,9 @@ host: api.ifeelgoods.com
 basePath: /fulfillment/v2
 schemes:
   - https
+
+consumes:
+  - application/json
 produces:
   - application/json
 
