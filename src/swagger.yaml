@@ -73,7 +73,7 @@ paths:
     get:
       tags:
         - Account
-      summary: Show current Account
+      summary: Show current
       parameters:
         - $ref: '#/parameters/Api-Key'
       responses:
@@ -83,7 +83,7 @@ paths:
     get:
       tags:
         - Reward
-      summary: List Rewards
+      summary: List all
       parameters:
         - $ref: '#/parameters/Api-Key'
       responses:
@@ -95,7 +95,7 @@ paths:
     get:
       tags:
         - Reward
-      summary: Show specific Reward
+      summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/RewardSku'
@@ -112,7 +112,7 @@ paths:
     get:
       tags:
         - Client
-      summary: List Clients
+      summary: List all
       parameters:
         - $ref: '#/parameters/Api-Key'
       responses:
@@ -124,7 +124,7 @@ paths:
     get:
       tags:
         - Client
-      summary: Show specific Client
+      summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/ClientId'
@@ -141,7 +141,7 @@ paths:
     get:
       tags:
         - Promotion
-      summary: List Promotions
+      summary: List all (for a given Client)
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/ClientId'
@@ -154,7 +154,7 @@ paths:
     get:
       tags:
         - Promotion
-      summary: Show specific Promotion
+      summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/PromotionId'
@@ -171,7 +171,7 @@ paths:
     get:
       tags:
         - Redemption
-      summary: List Redemptions
+      summary: List all (for a given Promotion)
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/PromotionId'
@@ -183,7 +183,7 @@ paths:
     post:
       tags:
         - Redemption
-      summary: Create or Find a Redemption
+      summary: Create or Find
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/PromotionId'
@@ -206,7 +206,7 @@ paths:
     get:
       tags:
         - Redemption
-      summary: Show specific Redemption
+      summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/RedemptionId'
@@ -223,7 +223,7 @@ paths:
     get:
       tags:
         - Redemption
-      summary: List Redemptions for a given Reward
+      summary: List all (for a given Reward in a Promotion)
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/PromotionId'
@@ -234,7 +234,7 @@ paths:
     post:
       tags:
         - Redemption
-      summary: Create or Find a Redemption for a given Reward
+      summary: Create or Find (for a given Reward in a Promotion)
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/PromotionId'
@@ -258,7 +258,7 @@ paths:
     post:
       tags:
         - Redemption
-      summary: Redeem or Find a Redemption for a given Reward
+      summary: Redeem or Find (for a given Reward in a Promotion)
       parameters:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/PromotionId'
