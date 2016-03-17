@@ -1,12 +1,21 @@
 swagger: '2.0'
+
 info:
   title: Ifeelgoods Fulfillment API
   description: Get started delivering Rewards using the Ifeelgoods Platform Fulfillment API
-  version: 2.0.0
+  version: 2.1.0
+  contact:
+    name: API Support
+    url: http://www.ifeelgoods.com/contact
+    email: apisupport@ifeelgoods.com
+
 host: api.ifeelgoods.com
 basePath: /fulfillment/v2
 schemes:
   - https
+
+consumes:
+  - application/json
 produces:
   - application/json
 
@@ -14,7 +23,7 @@ tags:
   - name: Account
     description: An __Account__ allows you to access the Ifeelgoods API. Permissions are granted based on your roles.
   - name: Reward
-    description:  A __Reward__ (aka Product SKU) is a specific denomination of a Digital or Physical Gift that can be delivered to a User. "iTunes Code 10$ (US)" is a Reward.
+    description: A __Reward__ (aka Product SKU) is a specific denomination of a Digital or Physical Gift that can be delivered to a User. "iTunes Code 10$ (US)" is a Reward.
   - name: Client
     description: A __Client__ represents a customer account that will be either retrieving or delivering __Rewards__ to end users. Inventory and Budget are set at the Client level, however one Client can run several different __Promotions__.
   - name: Promotion
@@ -610,7 +619,7 @@ responses:
           example: unauthorized
         error_message:
           type: string
-          example: Error authenticating this request. API_KEY/API_SECRET are not valid
+          example: You need to be signed-in to perform this action.
   ErrorForbidden:
     description: Forbidden
     schema:
