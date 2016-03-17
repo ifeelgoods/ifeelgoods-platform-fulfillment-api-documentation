@@ -236,6 +236,9 @@ paths:
                 type: string
               user:
                 $ref: '#/definitions/User'
+            required:
+              - order_id
+              - user
       responses:
         200:
           $ref: '#/responses/Redemption'
@@ -260,6 +263,9 @@ paths:
                 type: string
               user:
                 $ref: '#/definitions/User'
+            required:
+              - order_id
+              - user
       responses:
         200:
           $ref: '#/responses/Redemption'
@@ -300,6 +306,9 @@ paths:
                 type: string
               user:
                 $ref: '#/definitions/User'
+            required:
+              - order_id
+              - user
       responses:
         200:
           $ref: '#/responses/Redemption'
@@ -309,6 +318,59 @@ paths:
           $ref: '#/responses/ErrorForbidden'
         404:
           $ref: '#/responses/ErrorNotFound'
+
+  /stats:
+    get:
+      tags:
+        - Stats
+      summary: Data relative to the Reward Delivery activity of a specific __Client__
+      parameters:
+        - $ref: '#/parameters/Api-Key'
+        - name: client_id
+          in: query
+          type: integer
+          format: int32
+        - name: promotion_id
+          in: query
+          type: integer
+          format: int32
+        - name: reward_sku
+          in: query
+          type: string
+        - name: start_date
+          description: ISO-8601 String representing the start date for the date range for which activity stats are extracted
+          in: query
+          type: string
+          format: date-time
+        - name: end_date
+          description: ISO-8601 String representing the end date for the date range for which activity stats are extracted
+          in: query
+          type: string
+          format: date-time
+        - name: interval
+          description: Aggregation granularity - daily, monthly, hourly (available only when states parameter is redeemed)
+          in: query
+          type: string
+          enum:
+            - hourly
+            - daily
+            - weekly
+            - monthly
+            - yearly
+        - name: states
+          description: Filter to specify the state of the redemptions to include in the stats
+          in: query
+          type: string
+          enum:
+            - pending
+            - redeemed
+            - denied
+            - failed
+      responses:
+        200:
+          $ref: '#/responses/Stats'
+        401:
+          $ref: '#/responses/ErrorUnauthorized'
 
 definitions:
   Account:
@@ -622,6 +684,49 @@ definitions:
         type: string
         example: US
 
+  Stats:
+    type: object
+    properties:
+      time_frame:
+        type: object
+        properties:
+          start:
+            type: string
+            format: date-time
+            example: 2016-03-16T00:00:00-08:00
+          end:
+            type: string
+            format: date-time
+            example: 2016-03-17T00:00:00-08:00
+      values:
+        type: array
+        items:
+          type: object
+          properties:
+            group_by:
+              type: object
+              properties:
+                client:
+                  type: integer
+                  example: 237
+                promotion:
+                  type: integer
+                  example: 115
+                reward:
+                  type: string
+                  example: APP-ITC-10USD-US
+            states:
+              type: object
+              properties:
+                pending:
+                  type: integer
+                redeemed:
+                  type: integer
+                denied:
+                  type: integer
+                failed:
+                  type: integer
+
   Paging:
     description: Pagination current state (current page number, number of items per page and total)
     type: object
@@ -764,3 +869,13 @@ responses:
             $ref: '#/definitions/Redemption'
         paging:
           $ref: '#/definitions/Paging'
+
+  Stats:
+    description: OK
+    schema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/definitions/Stats'
