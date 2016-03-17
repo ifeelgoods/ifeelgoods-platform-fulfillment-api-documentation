@@ -619,7 +619,7 @@ responses:
           example: unauthorized
         error_message:
           type: string
-          example: Error authenticating this request. API_KEY/API_SECRET are not valid
+          example: You need to be signed-in to perform this action.
   ErrorForbidden:
     description: Forbidden
     schema:
