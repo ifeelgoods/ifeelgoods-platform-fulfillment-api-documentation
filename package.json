@@ -1,0 +1,23 @@
+{
+  "name": "ifeelgoods-platform-fulfillment-api-documentation",
+  "version": "1.0.0",
+  "description": "Ifeelgoods Platform Fulfillment API Documentation",
+  "main": "''",
+  "dependencies": {
+    "yamljs": "^0.2.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build-swagger": "cp src/swagger.yaml dist/swagger.yaml && yaml2json src/swagger.yaml -p > dist/swagger.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ifeelgoods/ifeelgoods-platform-fulfillment-api-documentation.git"
+  },
+  "author": "Nicolas Lenepveu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ifeelgoods/ifeelgoods-platform-fulfillment-api-documentation/issues"
+  },
+  "homepage": "https://github.com/ifeelgoods/ifeelgoods-platform-fulfillment-api-documentation"
+}
