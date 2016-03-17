@@ -202,23 +202,6 @@ paths:
           $ref: '#/responses/Redemption'
         201:
           $ref: '#/responses/RedemptionCreated'
-  /redemptions/{redemption_id}:
-    get:
-      tags:
-        - Redemption
-      summary: Show
-      parameters:
-        - $ref: '#/parameters/Api-Key'
-        - $ref: '#/parameters/RedemptionId'
-      responses:
-        200:
-          $ref: '#/responses/Redemption'
-        401:
-          $ref: '#/responses/ErrorUnauthorized'
-        403:
-          $ref: '#/responses/ErrorForbidden'
-        404:
-          $ref: '#/responses/ErrorNotFound'
   /promotions/{promotion_id}/rewards/{reward_sku}/redemptions:
     get:
       tags:
@@ -278,6 +261,50 @@ paths:
           $ref: '#/responses/Redemption'
         201:
           $ref: '#/responses/RedemptionCreated'
+  /redemptions/{redemption_id}:
+    get:
+      tags:
+        - Redemption
+      summary: Show
+      parameters:
+        - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/RedemptionId'
+      responses:
+        200:
+          $ref: '#/responses/Redemption'
+        401:
+          $ref: '#/responses/ErrorUnauthorized'
+        403:
+          $ref: '#/responses/ErrorForbidden'
+        404:
+          $ref: '#/responses/ErrorNotFound'
+  /redemptions/{redemption_id}/actions/redeem:
+    post:
+      tags:
+        - Redemption
+      summary: Redeem or Find (for a given Reward in a Promotion)
+      parameters:
+        - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/RedemptionId'
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              order_id:
+                type: string
+              user:
+                $ref: '#/definitions/User'
+      responses:
+        200:
+          $ref: '#/responses/Redemption'
+        401:
+          $ref: '#/responses/ErrorUnauthorized'
+        403:
+          $ref: '#/responses/ErrorForbidden'
+        404:
+          $ref: '#/responses/ErrorNotFound'
 
 definitions:
   Account:
