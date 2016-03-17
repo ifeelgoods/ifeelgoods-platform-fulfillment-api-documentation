@@ -1,8 +1,14 @@
 swagger: '2.0'
+
 info:
   title: Ifeelgoods Fulfillment API
   description: Get started delivering Rewards using the Ifeelgoods Platform Fulfillment API
-  version: 2.0.0
+  version: 2.1.0
+  contact:
+    name: API Support
+    url: http://www.ifeelgoods.com/contact
+    email: apisupport@ifeelgoods.com
+
 host: api.ifeelgoods.com
 basePath: /fulfillment/v2
 schemes:
