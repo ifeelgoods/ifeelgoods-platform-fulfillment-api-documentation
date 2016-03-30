@@ -681,11 +681,11 @@ definitions:
           start:
             type: string
             format: date-time
-            example: 2016-03-16T00:00:00-08:00
+            example: 2016-03-16T08:00:00Z
           end:
             type: string
             format: date-time
-            example: 2016-03-17T00:00:00-08:00
+            example: 2016-03-17T08:00:00Z
       values:
         type: array
         items:
