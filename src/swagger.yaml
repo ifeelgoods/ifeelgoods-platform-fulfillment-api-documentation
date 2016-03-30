@@ -377,7 +377,6 @@ definitions:
         example: 170
       login:
         type: string
-        example: jdoe
       name:
         type: string
         example: John Doe
