@@ -51,6 +51,13 @@
     "Api-Key": {
       "name": "Api-Key",
       "in": "header",
+      "description": "You API Key",
+      "required": true,
+      "type": "string"
+    },
+    "Api-Secret": {
+      "name": "Api-Secret",
+      "in": "header",
       "description": "You API Secret",
       "required": true,
       "type": "string"
@@ -94,6 +101,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           }
         ],
         "responses": {
@@ -112,6 +122,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           }
         ],
         "responses": {
@@ -133,6 +146,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/RewardSku"
@@ -163,6 +179,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           }
         ],
         "responses": {
@@ -184,6 +203,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/ClientId"
@@ -216,6 +238,9 @@
             "$ref": "#/parameters/Api-Key"
           },
           {
+            "$ref": "#/parameters/Api-Secret"
+          },
+          {
             "$ref": "#/parameters/ClientId"
           }
         ],
@@ -238,6 +263,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/PromotionId"
@@ -264,10 +292,13 @@
         "tags": [
           "Redemption"
         ],
-        "summary": "List all (for a given Promotion)",
+        "summary": "List all",
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/PromotionId"
@@ -286,10 +317,13 @@
         "tags": [
           "Redemption"
         ],
-        "summary": "Create or Find",
+        "summary": "Create",
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/PromotionId"
@@ -306,76 +340,19 @@
                 },
                 "user": {
                   "$ref": "#/definitions/User"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/Redemption"
-          },
-          "201": {
-            "$ref": "#/responses/RedemptionCreated"
-          }
-        }
-      }
-    },
-    "/promotions/{promotion_id}/rewards/{reward_sku}/redemptions": {
-      "get": {
-        "tags": [
-          "Redemption"
-        ],
-        "summary": "List all (for a given Reward in a Promotion)",
-        "parameters": [
-          {
-            "$ref": "#/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/parameters/PromotionId"
-          },
-          {
-            "$ref": "#/parameters/RewardSku"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/RedemptionsList"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Redemption"
-        ],
-        "summary": "Create or Find (for a given Reward in a Promotion)",
-        "parameters": [
-          {
-            "$ref": "#/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/parameters/PromotionId"
-          },
-          {
-            "$ref": "#/parameters/RewardSku"
-          },
-          {
-            "name": "data",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "order_id": {
-                  "type": "string"
                 },
-                "user": {
-                  "$ref": "#/definitions/User"
+                "reward": {
+                  "type": "object",
+                  "properties": {
+                    "sku": {
+                      "type": "string",
+                      "example": "APP-ITC-10USD-US"
+                    }
+                  }
                 }
               },
               "required": [
-                "order_id",
-                "user"
+                "order_id"
               ]
             }
           }
@@ -395,10 +372,13 @@
         "tags": [
           "Redemption"
         ],
-        "summary": "Redeem or Find (for a given Reward in a Promotion)",
+        "summary": "Create and Redeem",
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/PromotionId"
@@ -448,6 +428,9 @@
             "$ref": "#/parameters/Api-Key"
           },
           {
+            "$ref": "#/parameters/Api-Secret"
+          },
+          {
             "$ref": "#/parameters/RedemptionId"
           }
         ],
@@ -472,10 +455,13 @@
         "tags": [
           "Redemption"
         ],
-        "summary": "Redeem or Find (for a given Reward in a Promotion)",
+        "summary": "Redeem",
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "$ref": "#/parameters/RedemptionId"
@@ -526,6 +512,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/Api-Key"
+          },
+          {
+            "$ref": "#/parameters/Api-Secret"
           },
           {
             "name": "client_id",

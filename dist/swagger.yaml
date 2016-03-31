@@ -37,6 +37,12 @@ parameters:
   Api-Key:
     name: Api-Key
     in: header
+    description: You API Key
+    required: true
+    type: string
+  Api-Secret:
+    name: Api-Secret
+    in: header
     description: You API Secret
     required: true
     type: string
@@ -73,6 +79,7 @@ paths:
       summary: Show current
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
       responses:
         200:
           $ref: '#/responses/Account'
@@ -84,6 +91,7 @@ paths:
       summary: List all
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
       responses:
         200:
           $ref: '#/responses/RewardsList'
@@ -96,6 +104,7 @@ paths:
       summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/RewardSku'
       responses:
         200:
@@ -114,6 +123,7 @@ paths:
       summary: List all
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
       responses:
         200:
           $ref: '#/responses/ClientsList'
@@ -126,6 +136,7 @@ paths:
       summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/ClientId'
       responses:
         200:
@@ -144,6 +155,7 @@ paths:
       summary: List all (for a given Client)
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/ClientId'
       responses:
         200:
@@ -157,6 +169,7 @@ paths:
       summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/PromotionId'
       responses:
         200:
@@ -172,9 +185,10 @@ paths:
     get:
       tags:
         - Redemption
-      summary: List all (for a given Promotion)
+      summary: List all
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/PromotionId'
       responses:
         200:
@@ -184,9 +198,10 @@ paths:
     post:
       tags:
         - Redemption
-      summary: Create or Find
+      summary: Create
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/PromotionId'
         - name: data
           in: body
@@ -198,44 +213,14 @@ paths:
                 type: string
               user:
                 $ref: '#/definitions/User'
-      responses:
-        200:
-          $ref: '#/responses/Redemption'
-        201:
-          $ref: '#/responses/RedemptionCreated'
-  /promotions/{promotion_id}/rewards/{reward_sku}/redemptions:
-    get:
-      tags:
-        - Redemption
-      summary: List all (for a given Reward in a Promotion)
-      parameters:
-        - $ref: '#/parameters/Api-Key'
-        - $ref: '#/parameters/PromotionId'
-        - $ref: '#/parameters/RewardSku'
-      responses:
-        200:
-          $ref: '#/responses/RedemptionsList'
-    post:
-      tags:
-        - Redemption
-      summary: Create or Find (for a given Reward in a Promotion)
-      parameters:
-        - $ref: '#/parameters/Api-Key'
-        - $ref: '#/parameters/PromotionId'
-        - $ref: '#/parameters/RewardSku'
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              order_id:
-                type: string
-              user:
-                $ref: '#/definitions/User'
+              reward:
+                type: object
+                properties:
+                  sku:
+                    type: string
+                    example: APP-ITC-10USD-US
             required:
               - order_id
-              - user
       responses:
         200:
           $ref: '#/responses/Redemption'
@@ -245,9 +230,10 @@ paths:
     post:
       tags:
         - Redemption
-      summary: Redeem or Find (for a given Reward in a Promotion)
+      summary: Create and Redeem
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/PromotionId'
         - $ref: '#/parameters/RewardSku'
         - name: data
@@ -275,6 +261,7 @@ paths:
       summary: Show
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/RedemptionId'
       responses:
         200:
@@ -289,9 +276,10 @@ paths:
     post:
       tags:
         - Redemption
-      summary: Redeem or Find (for a given Reward in a Promotion)
+      summary: Redeem
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/RedemptionId'
         - name: data
           in: body
@@ -323,6 +311,7 @@ paths:
       summary: Data relative to the Reward Delivery activity of a specific __Client__
       parameters:
         - $ref: '#/parameters/Api-Key'
+        - $ref: '#/parameters/Api-Secret'
         - name: client_id
           in: query
           type: integer
