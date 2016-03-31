@@ -377,7 +377,6 @@ definitions:
         example: 170
       login:
         type: string
-        example: jdoe
       name:
         type: string
         example: John Doe
@@ -626,7 +625,120 @@ definitions:
     properties:
       id:
         type: string
-        example: IFEEL-GOODS
+        example: MUC3B-JTQGN
+      url:
+        type: string
+        format: url
+        example: "https://redemption-sandbox.ifeelgoods.com/#/MUC3B-JTQGN"
+      state:
+        type: string
+        enum:
+          - pending
+          - redeemed
+          - denied
+          - failed
+        example: redeemed
+      order_id:
+        type: string
+        example: 856b0cb2-b40e-410f-93e8-182a1e13f8f9
+      testing:
+        type: boolean
+        example: false
+      activation_datetime:
+        type: string
+        format: date-time
+        example: 2015-09-29T10:40:06Z
+      redeemed_datetime:
+        type: string
+        format: date-time
+        example: 2015-09-29T10:40:11Z
+      updated_datetime:
+        type: string
+        format: date-time
+        example: 2015-12-11T17:47:42Z
+      client:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 45
+      promotion:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 402
+          status:
+            type: string
+            enum:
+              - enabled
+              - disabled
+              - paused
+              - completed
+            example: enabled
+          state:
+            type: string
+            enum:
+              - pending
+              - ready
+              - ended
+            example: ready
+      reward:
+        type: object
+        properties:
+          id:
+            type: string
+            example: APP-ITC-10EUR-FR
+          status:
+            type: string
+            enum:
+              - enabled
+              - disabled
+              - paused
+            example: enabled
+          state:
+            type: string
+            enum:
+              - invalid_reward
+              - no_allocation
+              - ready
+            example: ready
+      user:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 281
+      authentication_systems:
+        type: array
+        items:
+          type: string
+          enum:
+            - facebook_connect
+            - google
+            - email
+            - sms
+        example:
+          - email
+      activation_notification_channels:
+        type: array
+        items:
+          type: string
+          enum:
+            - email
+            - sms
+        example:
+          - email
+      notification_channels:
+        type: array
+        items:
+          type: string
+          enum:
+            - email
+            - sms
+        example:
+          - email
+          - sms
 
   User:
     type: object
@@ -637,7 +749,7 @@ definitions:
         example: james.brown@example.com
       phone_number:
         type: string
-        example: +16502899294
+        example: "+16502899294"
       first_name:
         type: string
         example: James
@@ -652,12 +764,13 @@ definitions:
     properties:
       line_1:
         type: string
-        example: 550 Hamilton Avenue
+        example: Ifeelgoods, Inc
       line_2:
         type: string
-        example: Suite 226
+        example: 550 Hamilton Avenue
       line_3:
         type: string
+        example: Suite 226
       line_4:
         type: string
       zipcode:
@@ -682,11 +795,11 @@ definitions:
           start:
             type: string
             format: date-time
-            example: 2016-03-16T00:00:00-08:00
+            example: 2016-03-16T08:00:00Z
           end:
             type: string
             format: date-time
-            example: 2016-03-17T00:00:00-08:00
+            example: 2016-03-17T08:00:00Z
       values:
         type: array
         items:
