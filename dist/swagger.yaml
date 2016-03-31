@@ -190,6 +190,30 @@ paths:
         - $ref: '#/parameters/Api-Key'
         - $ref: '#/parameters/Api-Secret'
         - $ref: '#/parameters/PromotionId'
+        - name: reward_sku
+          in: query
+          schema:
+             type: string
+             example: APP-ITC-10USD-US
+        - name: user_email
+          in: query
+          schema:
+             type: string
+             example: james.brown@example.com
+        - name: order_id
+          in: query
+          schema:
+             type: string
+        - name: state
+          in: query
+          schema:
+             type: string
+             enum:
+              - pending
+              - redeemed
+              - denied
+              - failed
+             example: redeemed
       responses:
         200:
           $ref: '#/responses/RedemptionsList'
@@ -287,12 +311,15 @@ paths:
           schema:
             type: object
             properties:
-              order_id:
-                type: string
               user:
                 $ref: '#/definitions/User'
+              reward:
+                type: object
+                properties:
+                  sku:
+                    type: string
+                    example: APP-ITC-10USD-US
             required:
-              - order_id
               - user
       responses:
         200:
@@ -677,7 +704,7 @@ definitions:
         properties:
           id:
             type: string
-            example: APP-ITC-10EUR-FR
+            example: APP-ITC-10USD-US
           status:
             type: string
             enum:
