@@ -4,6 +4,7 @@
   "description": "Ifeelgoods Platform Fulfillment API Documentation",
   "main": "''",
   "dependencies": {
+    "rdme": "2",
     "yamljs": "^0.2.6"
   },
   "devDependencies": {},
