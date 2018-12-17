@@ -1,0 +1,1082 @@
+openapi: 3.0.0
+
+info:
+  title: Fulfillment API
+  description: Get started delivering Rewards using the Ifeelgoods Platform Fulfillment API
+  version: v2.0
+  contact:
+    name: API Support
+    url: 'http://www.ifeelgoods.com/contact'
+    email: apisupport@ifeelgoods.com
+
+tags:
+  - name: Account
+    description: >-
+      An __Account__ allows you to access the Ifeelgoods API. Permissions are
+      granted based on your roles.
+  - name: Reward
+    description: >-
+      A __Reward__ (aka Product SKU) is a specific denomination of a Digital or
+      Physical Gift that can be delivered to a User. "iTunes Code 10$ (US)" is a
+      Reward.
+  - name: Client
+    description: >-
+      A __Client__ represents a customer account that will be either retrieving
+      or delivering __Rewards__ to end users. Inventory and Budget are set at
+      the Client level, however one Client can run several different
+      __Promotions__.
+  - name: Promotion
+    description: >-
+      A __Promotion__ represents the settings of a campaign in which a
+      __Client__ distributes their __Rewards__ to the end-users.
+  - name: Redemption
+    description: >-
+      A __Redemption__ defines the status of a __Reward__ delivery (user
+      eligibility, reward selected, authentication settings, notification
+      channels..)
+  - name: Stats
+    description: >-
+      Retrieve data relative to Rewards Delivery activity through the Ifeelgoods
+      Platform
+
+paths:
+  /accounts/me:
+    get:
+      tags:
+        - Account
+      summary: Show current
+      description: Gets the details of the account
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+      responses:
+        '200':
+          $ref: '#/components/responses/Account'
+
+  /rewards:
+    get:
+      tags:
+        - Reward
+      summary: List all
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+      responses:
+        '200':
+          $ref: '#/components/responses/RewardsList'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+  '/rewards/{reward_sku}':
+    get:
+      tags:
+        - Reward
+      summary: Show
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/RewardSku'
+      responses:
+        '200':
+          $ref: '#/components/responses/Reward'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '403':
+          $ref: '#/components/responses/ErrorForbidden'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+
+  /clients:
+    get:
+      tags:
+        - Client
+      summary: List all
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClientsList'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+  '/clients/{client_id}':
+    get:
+      tags:
+        - Client
+      summary: Show
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Client'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '403':
+          $ref: '#/components/responses/ErrorForbidden'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+
+  '/clients/{client_id}/promotions':
+    get:
+      tags:
+        - Promotion
+      summary: List all (for a given Client)
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/PromotionsList'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+  '/promotions/{promotion_id}':
+    get:
+      tags:
+        - Promotion
+      summary: Show
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/PromotionId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Promotion'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '403':
+          $ref: '#/components/responses/ErrorForbidden'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+
+  '/promotions/{promotion_id}/redemptions':
+    get:
+      tags:
+        - Redemption
+      summary: List all
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/PromotionId'
+        - name: reward_sku
+          in: query
+          schema:
+            type: string
+        - name: user_email
+          in: query
+          schema:
+            type: string
+        - name: order_id
+          in: query
+          schema:
+            type: string
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - redeemed
+              - denied
+              - failed
+      responses:
+        '200':
+          $ref: '#/components/responses/RedemptionsList'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+    post:
+      tags:
+        - Redemption
+      summary: Create
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/PromotionId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Redemption'
+        '201':
+          $ref: '#/components/responses/RedemptionCreated'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                user:
+                  $ref: '#/components/schemas/User'
+                reward:
+                  type: object
+                  properties:
+                    sku:
+                      type: string
+                      example: APP-ITC-10USD-US
+              required:
+                - order_id
+        required: true
+  '/promotions/{promotion_id}/rewards/{reward_sku}/redemptions/actions/redeem':
+    post:
+      tags:
+        - Redemption
+      summary: Create and Redeem
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/PromotionId'
+        - $ref: '#/components/parameters/RewardSku'
+      responses:
+        '200':
+          $ref: '#/components/responses/Redemption'
+        '201':
+          $ref: '#/components/responses/RedemptionCreated'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                user:
+                  $ref: '#/components/schemas/User'
+              required:
+                - order_id
+                - user
+        required: true
+  '/redemptions/{redemption_id}':
+    get:
+      tags:
+        - Redemption
+      summary: Show
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/RedemptionId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Redemption'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '403':
+          $ref: '#/components/responses/ErrorForbidden'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+  '/redemptions/{redemption_id}/actions/redeem':
+    post:
+      tags:
+        - Redemption
+      summary: Redeem
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - $ref: '#/components/parameters/RedemptionId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Redemption'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '403':
+          $ref: '#/components/responses/ErrorForbidden'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  $ref: '#/components/schemas/User'
+                reward:
+                  type: object
+                  properties:
+                    sku:
+                      type: string
+                      example: APP-ITC-10USD-US
+              required:
+                - user
+        required: true
+
+  /stats:
+    get:
+      tags:
+        - Stats
+      summary: Data relative to the Reward Delivery activity of a specific __Client__
+      parameters:
+        - $ref: '#/components/parameters/Api-Key'
+        - $ref: '#/components/parameters/Api-Secret'
+        - name: client_id
+          in: query
+          schema:
+            type: integer
+        - name: promotion_id
+          in: query
+          schema:
+            type: integer
+        - name: reward_sku
+          in: query
+          schema:
+            type: string
+        - name: start_date
+          description: >-
+            ISO-8601 String representing the start date for the date range for
+            which activity stats are extracted
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          description: >-
+            ISO-8601 String representing the end date for the date range for
+            which activity stats are extracted
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: interval
+          description: >-
+            Aggregation granularity - daily, monthly, hourly (available only
+            when states parameter is redeemed)
+          in: query
+          schema:
+            type: string
+            enum:
+              - hourly
+              - daily
+              - weekly
+              - monthly
+              - yearly
+        - name: states
+          description: >-
+            Filter to specify the state of the redemptions to include in the
+            stats
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - redeemed
+              - denied
+              - failed
+      responses:
+        '200':
+          $ref: '#/components/responses/Stats'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+
+servers:
+  - url: 'https://api-sandbox.ifeelgoods.com/fulfillment/v2'
+
+components:
+  parameters:
+    Api-Key:
+      name: Api-Key
+      in: header
+      description: You API Key
+      required: true
+      schema:
+        type: string
+        default: 2e7444c93f0d4e65285ca03ac16c27600b53f09b87cfe1ded4ccd23bf94fca32
+    Api-Secret:
+      name: Api-Secret
+      in: header
+      description: You API Secret
+      required: true
+      schema:
+        type: string
+        default: 7f62b4c0cde13c5aced14219af34b255451eb680812056015ecaade93f32dbad
+    RewardSku:
+      name: reward_sku
+      in: path
+      description: Unique Reward identifier (SKU)
+      required: true
+      schema:
+        type: string
+    ClientId:
+      name: client_id
+      in: path
+      description: Unique Client identifier
+      required: true
+      schema:
+        type: integer
+    PromotionId:
+      name: promotion_id
+      in: path
+      description: Unique Promotion identifier
+      required: true
+      schema:
+        type: integer
+    RedemptionId:
+      name: redemption_id
+      in: path
+      description: Unique Promotion identifier
+      required: true
+      schema:
+        type: integer
+  responses:
+    ErrorUnauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_name:
+                type: string
+                example: unauthorized
+              error_message:
+                type: string
+                example: You need to be signed-in to perform this action.
+    ErrorForbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_name:
+                type: string
+                example: forbidden
+              error_message:
+                type: string
+                example: You are not allowed to perform this action.
+    ErrorNotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_name:
+                type: string
+                example: not_found
+              error_message:
+                type: string
+                example: The resource or action does not exist.
+    Account:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Account'
+    Reward:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Reward'
+    RewardsList:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reward'
+              paging:
+                $ref: '#/components/schemas/Paging'
+    Client:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Client'
+    ClientsList:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+              paging:
+                $ref: '#/components/schemas/Paging'
+    Promotion:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Promotion'
+    PromotionsList:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Promotion'
+              paging:
+                $ref: '#/components/schemas/Paging'
+    Redemption:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Redemption'
+    RedemptionCreated:
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Redemption'
+    RedemptionsList:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Redemption'
+              paging:
+                $ref: '#/components/schemas/Paging'
+    Stats:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stats'
+
+  schemas:
+    Account:
+      description: >-
+        An __Account__ allows you to access the Ifeelgoods API. Permissions are
+        granted based on your roles.
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 170
+        login:
+          type: string
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+        phone_number:
+          type: string
+          example: 11234567890
+        roles:
+          type: array
+          items:
+            type: string
+            example: fulfillment_api
+        timezone:
+          type: string
+          example: America/Los_Angeles
+        locale:
+          type: string
+          example: en
+        access_type:
+          type: string
+          example: service
+
+    Reward:
+      description: >-
+        A __Reward__ (aka Product SKU) is a specific denomination of a Digital
+        or Physical Gift that can be delivered to a User. "iTunes Code 10$ (US)"
+        is a Reward.
+      type: object
+      properties:
+        sku:
+          type: string
+          example: APP-ITC-10USD-US
+        denomination:
+          type: string
+          example: $10
+        name:
+          type: string
+          example: $10 iTunes® Code
+        cost:
+          type: string
+          example: 10
+        cost_currency:
+          type: string
+          example: USD
+        face_value:
+          type: string
+          example: 10
+        categories:
+          type: array
+          items:
+            type: string
+          example:
+            - Games & Entertainment
+            - Sports
+            - Shopping
+        country:
+          type: array
+          items:
+            type: string
+          example:
+            - US
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - featured
+        targeting:
+          type: object
+          properties:
+            gender:
+              type: array
+              items:
+                type: string
+              example:
+                - male
+                - female
+            age_range:
+              type: array
+              items:
+                type: string
+              example:
+                - 18-24
+                - 25-34
+            reach:
+              type: string
+              example: 500 Millions App Store Account
+        catalog_badge_url:
+          type: string
+          format: url
+          example: >-
+            //cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/b62a6cd46a327bfcfba41a4bed2083d7.png/raw.png
+        catalog_card_url:
+          type: string
+          format: url
+          example: >-
+            //cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/b62a6cd46a327bfcfba41a4bed2083d7.png/raw.png
+        logo_url:
+          type: string
+          format: url
+          example: >-
+            //cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/3d8028726d101e970e7f3b49e178ca85.png/raw.png
+        description:
+          type: string
+          example: >-
+            iTunes Gift Cards are the perfect way to give the gift of
+            entertainment! <br><br> Reward your customers with iTunes Gift
+            Codes, which allow users to shop for everything in the iTunes Store
+            : music, movies, TV shows, apps, books, and more ! <br><br> Get the
+            most of your ad dollars by using official iTunes creative and
+            benefit from Apple’s great brand awareness!
+        terms_and_conditions_url:
+          type: string
+          format: url
+          example: >-
+            http://www.apple.com/legal/internet-services/itunes/us/terms.html#GIFTS
+        terms_and_conditions:
+          type: string
+          example: >-
+            Valid only on iTunes Store for U.S. Requires iTunes account and
+            prior acceptance of license and usage terms. (...)
+
+    Client:
+      description: >-
+        A __Client__ represents a customer account that will be either
+        retrieving or delivering __Rewards__ to end users. Inventory and Budget
+        are set at the Client level, however one Client can run several
+        different __Promotions__.
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 237
+        ui_id:
+          type: string
+          example: ifeelgoods-inc
+        name:
+          type: string
+          example: 'Ifeelgoods, Inc.'
+        state:
+          type: string
+          example: active
+        billing_location:
+          type: string
+          example: US
+        billing_currency:
+          type: string
+          example: USD
+        contact_email:
+          type: string
+          format: email
+          example: joe@ifeelgoods.com
+        contact_phone:
+          type: string
+          example: 11234567890
+        website:
+          type: string
+          format: url
+          example: 'http://www.ifeelgoods.com'
+        operating_countries:
+          type: array
+          items:
+            type: string
+          example:
+            - CA
+            - JP
+            - US
+        locale:
+          type: string
+          example: en
+        logo_url:
+          type: string
+          format: url
+          example: >-
+            //cdn.ifeelgoods.com/media/a308a55a5b865ca43d4eda67dffa188a/e90ddb6726bdb9171badc3d90097746a.png/raw.png
+        promotions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 115
+              name:
+                type: string
+                example: Christmas gifts delivery
+
+    Promotion:
+      description: >-
+        A __Promotion__ represents the settings of a campaign in which a
+        __Client__ distributes their __Rewards__ to the end-users.
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 944
+        ui_id:
+          type: string
+          example: christmas-gifts
+        locale:
+          type: string
+          example: en
+        name:
+          type: string
+          example: Christmas gifts delivery
+        start_datetime:
+          type: string
+          format: date-time
+          example: 2018-12-17T11:09:42.406Z
+        end_datetime:
+          type: string
+          format: date-time
+          example: 2018-12-17T11:09:42.406Z
+        client:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 237
+            name:
+              type: string
+              example: 'Ifeelgoods, Inc.'
+        status:
+          type: string
+          example: ready
+        state:
+          type: string
+          example: pending
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              sku:
+                type: string
+                example: APP-ITC-10USD-US
+              name:
+                type: string
+                example: $10 iTunes® Code
+              state:
+                type: string
+                example: ready
+              status:
+                type: string
+                example: enabled
+        fraud_level:
+          type: string
+          example: standard
+        redeem_frequency:
+          type: string
+          example: multiple
+        authentication_systems:
+          type: array
+          items:
+            type: string
+          example:
+            - email
+        secured_order_ids:
+          type: boolean
+          example: false
+
+    Redemption:
+      description: >-
+        A __Redemption__ defines the status of a __Reward__ delivery (user
+        eligibility, reward selected, authentication settings, notification
+        channels..)
+      type: object
+      properties:
+        id:
+          type: string
+          example: MUC3B-JTQGN
+        url:
+          type: string
+          format: url
+          example: 'https://redemption-sandbox.ifeelgoods.com/#/MUC3B-JTQGN'
+        state:
+          type: string
+          enum:
+            - pending
+            - redeemed
+            - denied
+            - failed
+          example: redeemed
+        order_id:
+          type: string
+          example: 856b0cb2-b40e-410f-93e8-182a1e13f8f9
+        testing:
+          type: boolean
+          example: false
+        activation_datetime:
+          type: string
+          format: date-time
+          example: 2018-12-17T11:09:42.406Z
+        redeemed_datetime:
+          type: string
+          format: date-time
+          example: 2018-12-17T11:09:42.406Z
+        updated_datetime:
+          type: string
+          format: date-time
+          example: 2018-12-17T11:09:42.406Z
+        client:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 45
+        promotion:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 402
+            status:
+              type: string
+              enum:
+                - enabled
+                - disabled
+                - paused
+                - completed
+              example: enabled
+            state:
+              type: string
+              enum:
+                - pending
+                - ready
+                - ended
+              example: ready
+        reward:
+          type: object
+          properties:
+            id:
+              type: string
+              example: APP-ITC-10USD-US
+            status:
+              type: string
+              enum:
+                - enabled
+                - disabled
+                - paused
+              example: enabled
+            state:
+              type: string
+              enum:
+                - invalid_reward
+                - no_allocation
+                - ready
+              example: ready
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 281
+        authentication_systems:
+          type: array
+          items:
+            type: string
+            enum:
+              - facebook_connect
+              - google
+              - email
+              - sms
+          example:
+            - email
+        activation_notification_channels:
+          type: array
+          items:
+            type: string
+            enum:
+              - email
+              - sms
+          example:
+            - email
+        notification_channels:
+          type: array
+          items:
+            type: string
+            enum:
+              - email
+              - sms
+          example:
+            - email
+            - sms
+
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: james.brown@example.com
+        phone_number:
+          type: string
+          example: '+16502899294'
+        first_name:
+          type: string
+          example: James
+        last_name:
+          type: string
+          example: Brown
+        address:
+          $ref: '#/components/schemas/Address'
+
+    Address:
+      type: object
+      properties:
+        line_1:
+          type: string
+          example: 'Ifeelgoods, Inc'
+        line_2:
+          type: string
+          example: 550 Hamilton Avenue
+        line_3:
+          type: string
+          example: Suite 226
+        line_4:
+          type: string
+        zipcode:
+          type: string
+          example: 94301
+        city:
+          type: string
+          example: Palo Alto
+        state:
+          type: string
+          example: California
+        country:
+          type: string
+          example: US
+
+    Stats:
+      type: object
+      properties:
+        time_frame:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+              example: 2018-12-17T11:09:42.406Z
+            end:
+              type: string
+              format: date-time
+              example: 2018-12-17T11:09:42.406Z
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              group_by:
+                type: object
+                properties:
+                  client:
+                    type: integer
+                    example: 237
+                  promotion:
+                    type: integer
+                    example: 115
+                  reward:
+                    type: string
+                    example: APP-ITC-10USD-US
+              states:
+                type: object
+                properties:
+                  pending:
+                    type: integer
+                  redeemed:
+                    type: integer
+                  denied:
+                    type: integer
+                  failed:
+                    type: integer
+
+    Paging:
+      description: >-
+        Pagination current state (current page number, number of items per page
+        and total)
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 186
+
+x-samples-languages: ['curl', 'ruby', 'node', 'python', 'php']
