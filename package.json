@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build-swagger": "cp src/swagger.yaml dist/swagger.yaml && yaml2json src/swagger.yaml -p > dist/swagger.json"
+    "build-swagger": "cp src/swagger.yaml dist/swagger.yaml && yaml2json dist/swagger.yaml -p > dist/swagger.json"
   },
   "repository": {
     "type": "git",

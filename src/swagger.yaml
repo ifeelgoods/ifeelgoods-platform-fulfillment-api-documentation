@@ -3,13 +3,13 @@ swagger: '2.0'
 info:
   title: Ifeelgoods Fulfillment API
   description: Get started delivering Rewards using the Ifeelgoods Platform Fulfillment API
-  version: 2.1.0
+  version: v2.0
   contact:
     name: API Support
     url: http://www.ifeelgoods.com/contact
     email: apisupport@ifeelgoods.com
 
-host: api.ifeelgoods.com
+host: api-sandbox.ifeelgoods.com
 basePath: /fulfillment/v2
 schemes:
   - https
@@ -40,12 +40,14 @@ parameters:
     description: You API Key
     required: true
     type: string
+    default: 2e7444c93f0d4e65285ca03ac16c27600b53f09b87cfe1ded4ccd23bf94fca32
   Api-Secret:
     name: Api-Secret
     in: header
     description: You API Secret
     required: true
     type: string
+    default: 7f62b4c0cde13c5aced14219af34b255451eb680812056015ecaade93f32dbad
   RewardSku:
     name: reward_sku
     in: path
@@ -192,28 +194,24 @@ paths:
         - $ref: '#/parameters/PromotionId'
         - name: reward_sku
           in: query
-          schema:
-             type: string
-             example: APP-ITC-10USD-US
+          type: string
+          # example: APP-ITC-10USD-US
         - name: user_email
           in: query
-          schema:
-             type: string
-             example: james.brown@example.com
+          type: string
+          # example: james.brown@example.com
         - name: order_id
           in: query
-          schema:
-             type: string
+          type: string
         - name: state
           in: query
-          schema:
-             type: string
-             enum:
-              - pending
-              - redeemed
-              - denied
-              - failed
-             example: redeemed
+          type: string
+          enum:
+            - pending
+            - redeemed
+            - denied
+            - failed
+            # example: redeemed
       responses:
         200:
           $ref: '#/responses/RedemptionsList'
