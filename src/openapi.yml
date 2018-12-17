@@ -277,16 +277,13 @@ paths:
                 - user
         required: true
 
-  /stats:
+  '/clients/{client_id}/stats':
     get:
       tags:
         - Stats
-      summary: Data relative to the Reward Delivery activity of a specific __Client__
+      summary: Redemption Stats
+      description: Data relative to the Reward Delivery activity of a specific Client
       parameters:
-        - name: client_id
-          in: query
-          schema:
-            type: integer
         - name: promotion_id
           in: query
           schema:
