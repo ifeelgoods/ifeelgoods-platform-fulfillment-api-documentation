@@ -9,7 +9,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build-swagger": "cp src/swagger.yaml dist/swagger.yaml && yaml2json dist/swagger.yaml -p > dist/swagger.json"
+    "build-swagger": "cp src/swagger.yaml dist/swagger.yaml && yaml2json dist/swagger.yaml -p > dist/swagger.json",
+    "build-openapi": "cp src/openapi.yml dist/openapi.yml && yaml2json dist/openapi.yml -p > dist/openapi.json",
+    "publish": "yarn build-openapi && ./node_modules/.bin/rdme swagger dist/openapi.json --key=rzkhfpw33MoreqTyJZkcbdApFXnX0ykT --id=5c178ca4a845ae024fee3453"
   },
   "repository": {
     "type": "git",
