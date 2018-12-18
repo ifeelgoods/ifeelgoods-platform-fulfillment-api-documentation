@@ -36,6 +36,14 @@
       "description": "Retrieve data relative to Rewards Delivery activity through the Ifeelgoods Platform"
     }
   ],
+  "security": [
+    {
+      "Api-Key": []
+    },
+    {
+      "Api-Secret": []
+    }
+  ],
   "paths": {
     "/accounts/me": {
       "get": {
@@ -44,14 +52,6 @@
         ],
         "summary": "Show current",
         "description": "Gets the details of the account",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          }
-        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/Account"
@@ -65,14 +65,6 @@
           "Reward"
         ],
         "summary": "List all",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          }
-        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/RewardsList"
@@ -90,12 +82,6 @@
         ],
         "summary": "Show",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
           {
             "$ref": "#/components/parameters/RewardSku"
           }
@@ -122,14 +108,6 @@
           "Client"
         ],
         "summary": "List all",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          }
-        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/ClientsList"
@@ -147,12 +125,6 @@
         ],
         "summary": "Show",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
           {
             "$ref": "#/components/parameters/ClientId"
           }
@@ -181,12 +153,6 @@
         "summary": "List all (for a given Client)",
         "parameters": [
           {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
-          {
             "$ref": "#/components/parameters/ClientId"
           }
         ],
@@ -207,12 +173,6 @@
         ],
         "summary": "Show",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
           {
             "$ref": "#/components/parameters/PromotionId"
           }
@@ -240,12 +200,6 @@
         ],
         "summary": "List all",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
           {
             "$ref": "#/components/parameters/PromotionId"
           },
@@ -300,12 +254,6 @@
         "summary": "Create",
         "parameters": [
           {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
-          {
             "$ref": "#/components/parameters/PromotionId"
           }
         ],
@@ -357,12 +305,6 @@
         "summary": "Create and Redeem",
         "parameters": [
           {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
-          {
             "$ref": "#/components/parameters/PromotionId"
           },
           {
@@ -409,12 +351,6 @@
         "summary": "Show",
         "parameters": [
           {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
-          {
             "$ref": "#/components/parameters/RedemptionId"
           }
         ],
@@ -441,12 +377,6 @@
         ],
         "summary": "Redeem",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
           {
             "$ref": "#/components/parameters/RedemptionId"
           }
@@ -494,26 +424,14 @@
         }
       }
     },
-    "/stats": {
+    "/clients/{client_id}/stats": {
       "get": {
         "tags": [
           "Stats"
         ],
-        "summary": "Data relative to the Reward Delivery activity of a specific __Client__",
+        "summary": "Redemption Stats",
+        "description": "Data relative to the Reward Delivery activity of a specific Client",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Api-Key"
-          },
-          {
-            "$ref": "#/components/parameters/Api-Secret"
-          },
-          {
-            "name": "client_id",
-            "in": "query",
-            "schema": {
-              "type": "integer"
-            }
-          },
           {
             "name": "promotion_id",
             "in": "query",
@@ -589,31 +507,30 @@
   },
   "servers": [
     {
-      "url": "https://api-sandbox.ifeelgoods.com/fulfillment/v2"
+      "url": "https://api-sandbox.ifeelgoods.com/fulfillment/v2",
+      "description": "Sandbox server"
+    },
+    {
+      "url": "https://api.ifeelgoods.com/fulfillment/v2",
+      "description": "Production server"
     }
   ],
   "components": {
-    "parameters": {
+    "securitySchemes": {
       "Api-Key": {
+        "type": "apiKey",
         "name": "Api-Key",
         "in": "header",
-        "description": "You API Key",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "default": "2e7444c93f0d4e65285ca03ac16c27600b53f09b87cfe1ded4ccd23bf94fca32"
-        }
+        "description": "You API Key"
       },
       "Api-Secret": {
+        "type": "apiKey",
         "name": "Api-Secret",
         "in": "header",
-        "description": "You API Secret",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "default": "7f62b4c0cde13c5aced14219af34b255451eb680812056015ecaade93f32dbad"
-        }
-      },
+        "description": "You API Secret"
+      }
+    },
+    "parameters": {
       "RewardSku": {
         "name": "reward_sku",
         "in": "path",
