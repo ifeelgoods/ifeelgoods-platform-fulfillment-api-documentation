@@ -410,7 +410,7 @@ components:
       description: Unique Promotion identifier
       required: true
       schema:
-        type: integer
+        type: string
 
   responses:
     ErrorUnauthorized:
