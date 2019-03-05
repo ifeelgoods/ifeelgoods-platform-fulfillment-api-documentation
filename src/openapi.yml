@@ -204,16 +204,19 @@ paths:
             schema:
               type: object
               properties:
-                order_id:
-                  type: string
-                user:
-                  $ref: '#/components/schemas/User'
-                reward:
+                data:
                   type: object
                   properties:
-                    sku:
+                    order_id:
                       type: string
-                      example: APP-ITC-10USD-US
+                    user:
+                      $ref: '#/components/schemas/User'
+                    reward:
+                      type: object
+                      properties:
+                        sku:
+                          type: string
+                          example: APP-ITC-10USD-US
               required:
                 - order_id
         required: true
@@ -238,10 +241,13 @@ paths:
             schema:
               type: object
               properties:
-                order_id:
-                  type: string
-                user:
-                  $ref: '#/components/schemas/User'
+                data:
+                  type: object
+                  properties:
+                    order_id:
+                      type: string
+                    user:
+                      $ref: '#/components/schemas/User'
               required:
                 - order_id
                 - user
@@ -288,14 +294,17 @@ paths:
             schema:
               type: object
               properties:
-                user:
-                  $ref: '#/components/schemas/User'
-                reward:
+                data:
                   type: object
                   properties:
-                    sku:
-                      type: string
-                      example: APP-ITC-10USD-US
+                    user:
+                      $ref: '#/components/schemas/User'
+                    reward:
+                      type: object
+                      properties:
+                        sku:
+                          type: string
+                          example: APP-ITC-10USD-US
               required:
                 - user
         required: true
