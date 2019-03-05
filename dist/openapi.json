@@ -16,19 +16,19 @@
       "description": "An __Account__ allows you to access the Ifeelgoods API. Permissions are granted based on your roles."
     },
     {
-      "name": "Reward",
+      "name": "Rewards",
       "description": "A __Reward__ (aka Product SKU) is a specific denomination of a Digital or Physical Gift that can be delivered to a User. \"iTunes Code 10$ (US)\" is a Reward."
     },
     {
-      "name": "Client",
+      "name": "Clients",
       "description": "A __Client__ represents a customer account that will be either retrieving or delivering __Rewards__ to end users. Inventory and Budget are set at the Client level, however one Client can run several different __Promotions__."
     },
     {
-      "name": "Promotion",
+      "name": "Promotions",
       "description": "A __Promotion__ represents the settings of a campaign in which a __Client__ distributes their __Rewards__ to the end-users."
     },
     {
-      "name": "Redemption",
+      "name": "Redemptions",
       "description": "A __Redemption__ defines the status of a __Reward__ delivery (user eligibility, reward selected, authentication settings, notification channels..)"
     },
     {
@@ -50,8 +50,9 @@
         "tags": [
           "Account"
         ],
-        "summary": "Show current",
-        "description": "Gets the details of the account",
+        "summary": "Get the current Account",
+        "description": "Use this function to get the details of your current account",
+        "operationId": "getCurrentAccount",
         "responses": {
           "200": {
             "$ref": "#/components/responses/Account"
@@ -62,9 +63,11 @@
     "/rewards": {
       "get": {
         "tags": [
-          "Reward"
+          "Rewards"
         ],
-        "summary": "List all",
+        "summary": "List all Rewards",
+        "description": "Use this function to list all the rewards from the Ifeelgoods Catalog",
+        "operationId": "getAllRewards",
         "responses": {
           "200": {
             "$ref": "#/components/responses/RewardsList"
@@ -78,9 +81,11 @@
     "/rewards/{reward_sku}": {
       "get": {
         "tags": [
-          "Reward"
+          "Rewards"
         ],
-        "summary": "Show",
+        "summary": "Get a Reward",
+        "description": "Use this function to retrieve detailed description about a reward",
+        "operationId": "getRewardBySku",
         "parameters": [
           {
             "$ref": "#/components/parameters/RewardSku"
@@ -105,9 +110,11 @@
     "/clients": {
       "get": {
         "tags": [
-          "Client"
+          "Clients"
         ],
-        "summary": "List all",
+        "summary": "List all Clients",
+        "description": "Use this function to list all the clients your account can manage",
+        "operationId": "getAllClients",
         "responses": {
           "200": {
             "$ref": "#/components/responses/ClientsList"
@@ -121,9 +128,11 @@
     "/clients/{client_id}": {
       "get": {
         "tags": [
-          "Client"
+          "Clients"
         ],
-        "summary": "Show",
+        "summary": "Get a Client",
+        "description": "Use this function to retrieve detailed information about a client",
+        "operationId": "getClientById",
         "parameters": [
           {
             "$ref": "#/components/parameters/ClientId"
@@ -148,9 +157,11 @@
     "/clients/{client_id}/promotions": {
       "get": {
         "tags": [
-          "Promotion"
+          "Promotions"
         ],
-        "summary": "List all (for a given Client)",
+        "summary": "List all Promotions",
+        "description": "Use this function to list all the promotions of a specific client",
+        "operationId": "getAllPromotionsByClientId",
         "parameters": [
           {
             "$ref": "#/components/parameters/ClientId"
@@ -169,9 +180,11 @@
     "/promotions/{promotion_id}": {
       "get": {
         "tags": [
-          "Promotion"
+          "Promotions"
         ],
-        "summary": "Show",
+        "summary": "Get a Promotion",
+        "description": "Use this function to retrieve detailed information about a promotion and the list of the rewards available for delivery as part of this operation",
+        "operationId": "getPromotionById",
         "parameters": [
           {
             "$ref": "#/components/parameters/PromotionId"
@@ -196,9 +209,11 @@
     "/promotions/{promotion_id}/redemptions": {
       "get": {
         "tags": [
-          "Redemption"
+          "Redemptions"
         ],
-        "summary": "List all",
+        "summary": "List all Redemptions",
+        "description": "Use this function to list the status of all redemptions created as part of a promotion",
+        "operationId": "getAllRedemptions",
         "parameters": [
           {
             "$ref": "#/components/parameters/PromotionId"
@@ -249,9 +264,11 @@
       },
       "post": {
         "tags": [
-          "Redemption"
+          "Redemptions"
         ],
-        "summary": "Create",
+        "summary": "Create a Redemption",
+        "description": "Use this function to create a redemption object and initiate a reward delivery",
+        "operationId": "createRedemption",
         "parameters": [
           {
             "$ref": "#/components/parameters/PromotionId"
@@ -271,18 +288,23 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "order_id": {
-                    "type": "string"
-                  },
-                  "user": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "reward": {
+                  "data": {
                     "type": "object",
                     "properties": {
-                      "sku": {
-                        "type": "string",
-                        "example": "APP-ITC-10USD-US"
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "$ref": "#/components/schemas/User"
+                      },
+                      "reward": {
+                        "type": "object",
+                        "properties": {
+                          "sku": {
+                            "type": "string",
+                            "example": "APP-ITC-10USD-US"
+                          }
+                        }
                       }
                     }
                   }
@@ -300,9 +322,11 @@
     "/promotions/{promotion_id}/rewards/{reward_sku}/redemptions/actions/redeem": {
       "post": {
         "tags": [
-          "Redemption"
+          "Redemptions"
         ],
         "summary": "Create and Redeem",
+        "description": "Use this function to create a redemption object and perform a reward delivery",
+        "operationId": "createAndRedeemRedemption",
         "parameters": [
           {
             "$ref": "#/components/parameters/PromotionId"
@@ -325,11 +349,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "order_id": {
-                    "type": "string"
-                  },
-                  "user": {
-                    "$ref": "#/components/schemas/User"
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -346,9 +375,11 @@
     "/redemptions/{redemption_id}": {
       "get": {
         "tags": [
-          "Redemption"
+          "Redemptions"
         ],
-        "summary": "Show",
+        "summary": "Get a Redemption",
+        "description": "Use this function to retrieve detailed information about a redemption object",
+        "operationId": "getRedemptionById",
         "parameters": [
           {
             "$ref": "#/components/parameters/RedemptionId"
@@ -373,9 +404,11 @@
     "/redemptions/{redemption_id}/actions/redeem": {
       "post": {
         "tags": [
-          "Redemption"
+          "Redemptions"
         ],
         "summary": "Redeem",
+        "description": "Use this function to perform a reward delivery from an existing redemption object",
+        "operationId": "redeemRedemption",
         "parameters": [
           {
             "$ref": "#/components/parameters/RedemptionId"
@@ -401,15 +434,20 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user": {
-                    "$ref": "#/components/schemas/User"
-                  },
-                  "reward": {
+                  "data": {
                     "type": "object",
                     "properties": {
-                      "sku": {
-                        "type": "string",
-                        "example": "APP-ITC-10USD-US"
+                      "user": {
+                        "$ref": "#/components/schemas/User"
+                      },
+                      "reward": {
+                        "type": "object",
+                        "properties": {
+                          "sku": {
+                            "type": "string",
+                            "example": "APP-ITC-10USD-US"
+                          }
+                        }
                       }
                     }
                   }
@@ -429,8 +467,9 @@
         "tags": [
           "Stats"
         ],
-        "summary": "Redemption Stats",
-        "description": "Data relative to the Reward Delivery activity of a specific Client",
+        "summary": "Get Redemption Stats",
+        "description": "Use this function to access data relative to the reward delivery activity for a specific client",
+        "operationId": "getClientStats",
         "parameters": [
           {
             "name": "promotion_id",
@@ -564,7 +603,7 @@
         "description": "Unique Promotion identifier",
         "required": true,
         "schema": {
-          "type": "integer"
+          "type": "string"
         }
       }
     },
