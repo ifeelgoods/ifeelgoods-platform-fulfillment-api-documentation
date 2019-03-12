@@ -803,6 +803,12 @@
                 }
               }
             }
+          },
+          "application/pdf": {
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
           }
         }
       },
@@ -817,6 +823,12 @@
                   "$ref": "#/components/schemas/Redemption"
                 }
               }
+            }
+          },
+          "application/pdf": {
+            "schema": {
+              "type": "string",
+              "format": "binary"
             }
           }
         }

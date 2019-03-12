@@ -545,6 +545,10 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/Redemption'
+        application/pdf:
+          schema:
+            type: string
+            format: binary
     RedemptionCreated:
       description: Created
       content:
@@ -554,6 +558,10 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/Redemption'
+        application/pdf:
+          schema:
+            type: string
+            format: binary
     RedemptionsList:
       description: OK
       content:
